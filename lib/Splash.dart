@@ -51,11 +51,7 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
 
     return MaterialApp(
       home: Scaffold(
-        /* appBar: AppBar(
-          title: Text("MyApp"),
-          backgroundColor:
-              Colors.blue, //<- background color to combine with the picture :-)
-        ),*/
+
         body: Container(
           decoration: new BoxDecoration(color: Colors.white),
           child: new Center(
