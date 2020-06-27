@@ -41,16 +41,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       key: introKey,
       pages: [
         PageViewModel(
-          title: "Fractional shares",
+          title: "Save Time",
           body:
-          "Instead of having to buy an entire share, invest any amount you want.",
+          "Instead of having to stay in line , get your order fast.",
           image: _buildImage('logo'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Learn as you go",
+          title: "Better Service",
           body:
-          "Download the Stockpile app and master the market with our mini-lesson.",
+          "rhfbhb jnfj ",
           image: _buildImage('logo'),
           decoration: pageDecoration,
         ),
