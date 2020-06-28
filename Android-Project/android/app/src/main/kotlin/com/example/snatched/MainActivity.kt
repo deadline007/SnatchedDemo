@@ -1,4 +1,4 @@
-package com.example.snatched
+package com.snatched.snatched
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

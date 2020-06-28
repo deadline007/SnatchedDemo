@@ -1,22 +1,25 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Splash.dart';
+import 'package:snatched/Routes/Route_Splash.dart';
+import 'package:snatched/Utilities/Class_ScreenConf.dart';
+import 'package:snatched/Routes/Route_Auth.dart';
 
-void main() => runApp(new MyApp());
-final bool debugShowCheckedModeBanner = true;
+void main() {
+  ClassScreenConf(); //Storing screen config.
+  runApp(
+    new Main(),
+  );
+}
 
-
-class MyApp extends StatelessWidget {
-  @override
+class Main extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      color: Colors.blue,
+    return MaterialApp(
+      initialRoute: '/',
       debugShowCheckedModeBanner: false,
-      home: new Splash(),
-
+      routes: {
+        '/': (context) => RouteSplash(),
+        '/authRoute': (context) => Auth(),
+      },
     );
   }
 }
-
