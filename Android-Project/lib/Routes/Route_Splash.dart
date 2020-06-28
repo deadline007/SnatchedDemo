@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:snatched/Utilities/Class_SharedPrefs.dart';
 /*
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:after_layout/after_layout.dart';
@@ -65,11 +67,19 @@ class RouteSplash extends StatelessWidget {
     Future<void>.delayed(
       Duration(seconds: 3),
       () async {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/authRoute',
-          (_) => false,
-        );
+        if (await ClassSharedPref().getState()) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/authRoute',
+            (_) => false,
+          );
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/appInfo',
+            (_) => false,
+          );
+        }
       },
     );
 
@@ -81,9 +91,9 @@ class RouteSplash extends StatelessWidget {
             child: Image.asset(
               'assets/images/logo.png',
               height: 300,
-            ),
+            ), //<- place where the image appears
           ),
-        ), //<- place where the image appears
+        ),
       ),
     );
   }
