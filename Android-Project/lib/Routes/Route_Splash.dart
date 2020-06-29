@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:snatched/Utilities/Class_SharedPrefs.dart';
+import 'package:snatched/Utilities/Class_AssetHolder.dart';
+import 'package:snatched/Utilities/Class_ScreenConf.dart';
 /*
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:after_layout/after_layout.dart';
@@ -55,25 +57,24 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
  */
 
 class RouteSplash extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  void onStart({BuildContext context}) {
+    ClassScreenConf().init(context); //Storing screen config.
     SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    onStart(context: context);
 
     Future<void>.delayed(
       Duration(seconds: 3),
       () async {
-        if (await ClassSharedPref().getState()) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/authRoute',
-            (_) => false,
-          );
-        } else {
+        if (!await ClassSharedPref().getState()) {
           Navigator.pushNamedAndRemoveUntil(
             context,
             '/appInfo',
@@ -89,7 +90,7 @@ class RouteSplash extends StatelessWidget {
           decoration: new BoxDecoration(color: Colors.white),
           child: new Center(
             child: Image.asset(
-              'assets/images/logo.png',
+              ClassAssetHolder.logo,
               height: 300,
             ), //<- place where the image appears
           ),

@@ -7,6 +7,9 @@ class RouteAuth extends StatelessWidget {
       body: Container(
         child: Text(
           "ya",
+          style: TextStyle(
+            fontFamily: 'ProximaLight',
+          ),
         ),
       ),
     );
