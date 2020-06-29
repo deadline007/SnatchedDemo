@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:snatched/homescreen.dart';
-import 'dart:html';
+import 'Widget/BottomNavBarWidget.dart';
+
+import 'home.dart';
 
 enum AuthMode { LOGIN, SINGUP }
 
@@ -24,34 +25,30 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-           Center(
-             child: Container(
-               child: Image.asset("assets/images/logo.png",
-                 height: 200,
-                 width: 200,
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Center(
+               child: Container(
+                 child: Image.asset("assets/images/logo.png",
+                   height: 200,
+                   width: 200,
 
 
-              ),
+                ),
+               ),
              ),
            ),
             _authMode == AuthMode.LOGIN
                 ? loginCard(context)
                 : singUpCard(context),
-//            pageTitle(),
+
           ],
         ),
       ),
     );
   }
 
-//  Widget pageTitle() {
-//     return Image(
-//
-//    image: AssetImage("assets/images/logo.png",
-//
-//    ),
-//     );
-//  }
+
 
   Widget loginCard(BuildContext context) {
     return Column(
@@ -102,17 +99,17 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                        },
                         child: Text("Forgot Password ?",
                         ),
 
                       ),
                       RawMaterialButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => HomePage()));
-                        },
+                        onPressed: () {Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => BottomNavBarWidget()));},
                         elevation: 2.0,
                         fillColor: Color.fromRGBO(255, 2, 102,100),
                         child: Icon(
@@ -174,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Text(
                       "Sign Up",
                       style: TextStyle(
@@ -231,8 +228,8 @@ class _LoginPageState extends State<LoginPage> {
                       RawMaterialButton(
                         onPressed: () {Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HomePage()));
-                        },
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => BottomNavBarWidget()));},
                         elevation: 2.0,
                         fillColor: Color.fromRGBO(255, 2, 102,100),
                         child: Icon(
@@ -269,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                 });
               },
               textColor: Color.fromRGBO(255, 2, 102, 100),
-              child: Text("Login"),
+              child: Text("Logn"),
             )
           ],
         ),

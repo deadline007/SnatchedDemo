@@ -43,11 +43,11 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
                 builder: (BuildContext context) => LoginPage())));
 
 
-    var assetsImage = new AssetImage(
-        'assets/images/logo.png'); //<- Creates an object that fetches an image.
-    var image = new Image(
-        image: assetsImage,
-        height:300); //<- Creates a widget that displays an image.
+//    var assetsImage = new AssetImage(
+////        'assets/images/logo.png'); //<- Creates an object that fetches an image.
+//    var image = new Image(
+//        image: assetsImage,
+//        height:300); //<- Creates a widget that displays an image.
 
     return MaterialApp(
       home: Scaffold(
@@ -55,7 +55,7 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
         body: Container(
           decoration: new BoxDecoration(color: Colors.white),
           child: new Center(
-            child: image,
+            child: Image.asset("assets/images/logo.png"),
           ),
         ), //<- place where the image appears
       ),
