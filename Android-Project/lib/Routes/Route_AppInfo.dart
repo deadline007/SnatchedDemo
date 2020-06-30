@@ -60,7 +60,7 @@ class RouteAppInfo extends StatelessWidget {
                       size: widthMin * 10,
                     ),
                     onPressed: () {
-                      if (counter.value < 3) {
+                      if (counter.value < imageList.length - 1) {
                         counter.value += 1;
                       } else {
                         Navigator.pushNamedAndRemoveUntil(
@@ -74,6 +74,22 @@ class RouteAppInfo extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(
+              bottom: heightMin * 6,
+              child: Container(
+                height: heightMin * 10,
+                width: widthMin * 20,
+                child: Consumer<ValueNotifier<int>>(
+                  builder: (_, counter, __) {
+                    return Slider(
+                      max: (imageList.length - 1) * 1.0,
+                      value: (counter.value) * 1.0,
+                      onChanged: (_) {},
+                    );
+                  },
+                ),
+              ),
+            )
           ],
         ),
       ),
