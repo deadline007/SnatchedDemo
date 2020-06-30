@@ -33,15 +33,37 @@ class RouteAppInfo extends StatelessWidget {
 
   Widget widgetData(BuildContext context) {
     final counter = Provider.of<ValueNotifier<int>>(context, listen: false);
+    void changeCounter(String option) {
+      if (option == "add") {
+        counter.value += 1;
+      } else {
+        counter.value -= 1;
+      }
+    }
+
     return Scaffold(
       body: Container(
         height: heightMax,
         width: widthMax,
         child: Stack(
           children: <Widget>[
-            Center(
-              child: Consumer<ValueNotifier<int>>(
-                builder: (_, counter, __) => imageList[counter.value],
+            GestureDetector(
+              onPanUpdate: (details) {
+                if (details.delta.dx < -1.5 &&
+                    counter.value < imageList.length - 1) {
+                  changeCounter("add");
+                } else if (details.delta.dx > 1.5 && counter.value > 0) {
+                  changeCounter("minus");
+                }
+              },
+              child: Center(
+                child: Consumer<ValueNotifier<int>>(
+                  builder: (_, counter, __) => Container(
+                      width: widthMax,
+                      height: heightMax,
+                      color: Colors.brown[200],
+                      child: imageList[counter.value]),
+                ),
               ),
             ),
             Positioned(
@@ -61,7 +83,7 @@ class RouteAppInfo extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (counter.value < imageList.length - 1) {
-                        counter.value += 1;
+                        changeCounter("add");
                       } else {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
@@ -74,7 +96,7 @@ class RouteAppInfo extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
+            /* Positioned(
               bottom: heightMin * 6,
               child: Container(
                 height: heightMin * 10,
@@ -82,6 +104,7 @@ class RouteAppInfo extends StatelessWidget {
                 child: Consumer<ValueNotifier<int>>(
                   builder: (_, counter, __) {
                     return Slider(
+
                       max: (imageList.length - 1) * 1.0,
                       value: (counter.value) * 1.0,
                       onChanged: (_) {},
@@ -89,7 +112,7 @@ class RouteAppInfo extends StatelessWidget {
                   },
                 ),
               ),
-            )
+            ) */
           ],
         ),
       ),
