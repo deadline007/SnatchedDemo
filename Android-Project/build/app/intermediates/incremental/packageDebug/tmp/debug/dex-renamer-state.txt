@@ -1,4 +1,4 @@
-#Wed Jul 01 18:23:25 IST 2020
+#Thu Jul 02 09:33:06 IST 2020
 path.1=classes.dex
 path.0=classes.dex
 renamed.10=classes11.dex
@@ -18,8 +18,8 @@ base.7=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\buil
 base.6=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\out\\classes_3.dex
 base.5=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\out\\classes_2.dex
 base.4=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\out\\classes_1.dex
-base.3=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes2.dex
-base.2=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\out\\classes_0.dex
+base.3=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\out\\classes_0.dex
+base.2=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes2.dex
 base.1=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\out\\classes.dex
 base.0=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
 base.10=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\out\\classes_7.dex
@@ -30,5 +30,5 @@ path.7=classes_4.dex
 path.6=classes_3.dex
 path.5=classes_2.dex
 path.4=classes_1.dex
-path.3=classes2.dex
-path.2=classes_0.dex
+path.3=classes_0.dex
+path.2=classes2.dex

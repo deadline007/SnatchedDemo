@@ -14,7 +14,7 @@ enum password_error {
   NO_PASSWORD_GIVEN,
 }
 
-class RouteAuth extends StatelessWidget {
+class RouteAuthSignIn extends StatelessWidget {
   final double widthMin = ClassScreenConf.blockH;
   final double widthMax = ClassScreenConf.hArea;
   final double heightMin = ClassScreenConf.blockV;
@@ -35,12 +35,18 @@ class RouteAuth extends StatelessWidget {
       userIdErrorDisplay(context);
     } else {
       final authSubmit = ClassFirebaseAuth(_email.text, _password.text);
-      await authSubmit.signIn();
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/menu',
-        (_) => false,
-      );
+      final submitResult = await authSubmit.signIn();
+      if (submitResult == "NONE") {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/menu',
+          (_) => false,
+        );
+      } else {
+        final errorCode =
+            Provider.of<ValueNotifier<String>>(context, listen: false);
+        errorCode.value = submitResult;
+      }
     }
   }
 
@@ -51,6 +57,9 @@ class RouteAuth extends StatelessWidget {
     final errorPassword =
         Provider.of<ValueNotifier<password_error>>(context, listen: false);
     errorPassword.value = password_error.NONE;
+    final errorCode =
+        Provider.of<ValueNotifier<String>>(context, listen: false);
+    errorCode.value = "NONE";
   }
 
   void userIdErrorDisplay(BuildContext context) {
@@ -77,6 +86,9 @@ class RouteAuth extends StatelessWidget {
             create: (context) =>
                 ValueNotifier<password_error>(password_error.NONE),
           ),
+          ChangeNotifierProvider<ValueNotifier<String>>(
+            create: (context) => ValueNotifier<String>("NONE"),
+          )
         ],
         child: Builder(
           builder: (context) => buildContainer(
@@ -118,6 +130,29 @@ class RouteAuth extends StatelessWidget {
                     color: colorDef,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: heightMin * 26,
+            child: Container(
+              height: heightMin * 10,
+              width: widthMax,
+              child: Center(
+                child: Consumer<ValueNotifier<String>>(
+                  builder: (context, errorCode, _) {
+                    if (errorCode.value == "NONE") {
+                      return Container();
+                    } else {
+                      return Text(
+                        errorCode.value,
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      );
+                    }
+                  },
                 ),
               ),
             ),
@@ -257,7 +292,7 @@ class RouteAuth extends StatelessWidget {
               width: widthMax,
               child: Center(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(30),
                   child: Container(
                     color: colorDef,
                     child: Material(
@@ -277,6 +312,40 @@ class RouteAuth extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: heightMin * 77,
+            child: Container(
+              height: heightMin * 10,
+              width: widthMax,
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: widthMax /3,
+                    ),
+                    child: Text(
+                      "Nay Account ?",
+                      style: TextStyle(
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {/* 
+                      Navigator.push(context,) */
+                    },
+                    child: Text(
+                      "Sign Up!",
+                      style: TextStyle(
+                        color: colorDef,
+                        fontSize: widthMin * 5,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

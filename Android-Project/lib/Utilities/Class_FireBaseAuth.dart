@@ -7,10 +7,19 @@ class ClassFirebaseAuth {
   ClassFirebaseAuth(this._userId, this._password);
 
   Future<String> signIn() async {
-    final AuthResult result = await _auth.signInWithEmailAndPassword(
-        email: _userId, password: _password);
-    final FirebaseUser user = result.user;
-    return user.uid;
+    String errorMessage = "NONE";
+    FirebaseUser user;
+    try {
+      final AuthResult result = await _auth.signInWithEmailAndPassword(
+          email: _userId, password: _password);
+      user = result.user;
+    } catch (error) {
+      errorMessage = error.code.toString();
+    }
+    if (errorMessage == "NONE") {
+      print(user.uid);
+    }
+    return errorMessage;
   }
 
   Future<String> signUp() async {
