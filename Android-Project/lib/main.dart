@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:snatched/Routes/Route_Splash.dart';
 
-import 'package:snatched/Routes/Route_Auth.dart';
+import 'package:snatched/Routes/Route_AuthSignIn.dart';
 import 'package:snatched/Routes/Route_AppInfo.dart';
+import 'package:snatched/Routes/Route_Menu.dart';
 
 void main() {
   runApp(
@@ -18,8 +19,9 @@ class Main extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => RouteSplash(),
-        '/authRoute': (context) => RouteAuth(),
+        '/authSignIn': (context) => RouteAuth(),
         '/appInfo': (context) => RouteAppInfo(),
+        '/menu': (context) => RouteMenu(),
       },
     );
   }

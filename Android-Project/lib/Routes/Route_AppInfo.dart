@@ -87,7 +87,7 @@ class RouteAppInfo extends StatelessWidget {
                       } else {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
-                          '/authRoute',
+                          '/authSignIn',
                           (_) => false,
                         );
                       }
