@@ -83,7 +83,7 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
                         color: Color.fromRGBO(255, 2, 102,100),
                         elevation: 7.0,
                         child: GestureDetector(
-                          onTap: () {_settingModalBottomSheet(context);},
+                          onTap: () {_paymentOptionSheet(context);},
                           child: Center(
                             child: Text(
                               'CONFIRM',
@@ -105,7 +105,7 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
   }
 
 
-void _settingModalBottomSheet(context){
+void _paymentOptionSheet(context){
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
