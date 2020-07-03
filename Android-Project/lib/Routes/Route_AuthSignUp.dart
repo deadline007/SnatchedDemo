@@ -35,7 +35,7 @@ class RouteAuthSignUp extends StatelessWidget {
       userIdErrorDisplay(context);
     } else {
       final authSubmit = ClassFirebaseAuth(_email.text, _password.text);
-      final submitResult = await authSubmit.signIn();
+      final submitResult = await authSubmit.signUp();
       if (submitResult == "NONE") {
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -108,12 +108,28 @@ class RouteAuthSignUp extends StatelessWidget {
         children: <Widget>[
           Positioned(
             top: heightMin * 5,
-            child: Container(
-              height: heightMin * 10,
-              width: widthMax - 44,
-              child: Image.asset(
-                ClassAssetHolder.logo,
-              ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Material(
+                    child: InkWell(
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: heightMin * 10,
+                  width: widthMax - 100,
+                  child: Image.asset(
+                    ClassAssetHolder.logo,
+                  ),
+                ),
+              ],
             ),
           ),
           Positioned(
@@ -123,7 +139,7 @@ class RouteAuthSignUp extends StatelessWidget {
               width: widthMax,
               child: Center(
                 child: Text(
-                  "Login",
+                  "Register",
                   style: TextStyle(
                     fontFamily: fontDef,
                     fontSize: widthMin * 10,
@@ -263,30 +279,6 @@ class RouteAuthSignUp extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: heightMin * 66,
-            child: Container(
-              width: widthMax - 46,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Material(
-                  child: InkWell(
-                    splashColor: colorDef,
-                    onTap: () {},
-                    child: Text(
-                      "Forgot Password ?",
-                      style: TextStyle(
-                        fontFamily: fontDef,
-                        fontSize: widthMin * 4.5,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
             top: heightMin * 72,
             child: Container(
               width: widthMax,
@@ -312,38 +304,6 @@ class RouteAuthSignUp extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: heightMin * 77,
-            child: Container(
-              height: heightMin * 10,
-              width: widthMax,
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: widthMax /3,
-                    ),
-                    child: Text(
-                      "Nay Account ?",
-                      style: TextStyle(
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Sign Up!",
-                      style: TextStyle(
-                        color: colorDef,
-                        fontSize: widthMin * 5,
-                      ),
-                    ),
-                  )
-                ],
               ),
             ),
           ),

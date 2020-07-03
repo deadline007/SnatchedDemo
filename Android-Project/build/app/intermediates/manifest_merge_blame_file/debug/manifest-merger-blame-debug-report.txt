@@ -85,7 +85,7 @@
 54            android:name="com.google.firebase.components.ComponentDiscoveryService"
 54-->[:firebase_analytics] C:\Users\arvin\Documents\GitHub\SnatchedDemo\Android-Project\build\firebase_analytics\intermediates\library_manifest\debug\AndroidManifest.xml:12:18-89
 55            android:directBootAware="true"
-55-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\39dace0e8779aaed6afa473d19a18864\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+55-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\7b90ddcbcc84e53aeeac9274568a897b\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
 56            android:exported="false" >
 56-->[com.google.firebase:firebase-auth:19.2.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\a83bb62cb43b672cf00b874e0ee6110c\firebase-auth-19.2.0\AndroidManifest.xml:35:13-37
 57            <meta-data
@@ -125,11 +125,11 @@
 74                android:value="com.google.firebase.components.ComponentRegistrar" />
 74-->[com.google.android.gms:play-services-measurement-api:17.2.2] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\ca912bff2260618b5b638fe661521702\play-services-measurement-api-17.2.2\AndroidManifest.xml:32:17-82
 75            <meta-data
-75-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\709d47f360dbbe9d88cfc4afa9481317\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
+75-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\1de0af27471f8dc3511523bdd79050ef\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
 76                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
-76-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\709d47f360dbbe9d88cfc4afa9481317\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
+76-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\1de0af27471f8dc3511523bdd79050ef\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
 77                android:value="com.google.firebase.components.ComponentRegistrar" />
-77-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\709d47f360dbbe9d88cfc4afa9481317\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
+77-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\1de0af27471f8dc3511523bdd79050ef\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
 78            <meta-data
 78-->[com.google.firebase:firebase-iid:20.0.2] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\f26cdfb5f8d69cbc9663543f3ec1de65\firebase-iid-20.0.2\AndroidManifest.xml:32:13-34:85
 79                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
@@ -216,15 +216,15 @@
 123        </receiver>
 124
 125        <provider
-125-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\39dace0e8779aaed6afa473d19a18864\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+125-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\7b90ddcbcc84e53aeeac9274568a897b\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
 126            android:name="com.google.firebase.provider.FirebaseInitProvider"
-126-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\39dace0e8779aaed6afa473d19a18864\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+126-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\7b90ddcbcc84e53aeeac9274568a897b\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
 127            android:authorities="com.snatched.snatched.firebaseinitprovider"
-127-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\39dace0e8779aaed6afa473d19a18864\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+127-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\7b90ddcbcc84e53aeeac9274568a897b\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
 128            android:exported="false"
-128-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\39dace0e8779aaed6afa473d19a18864\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+128-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\7b90ddcbcc84e53aeeac9274568a897b\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
 129            android:initOrder="100" />
-129-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\39dace0e8779aaed6afa473d19a18864\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+129-->[com.google.firebase:firebase-common:19.3.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\7b90ddcbcc84e53aeeac9274568a897b\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
 130
 131        <activity
 131-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\6eb14f512292913515d869914807ad40\play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
@@ -236,11 +236,11 @@
 134-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\6eb14f512292913515d869914807ad40\play-services-base-17.1.0\AndroidManifest.xml:26:13-72
 135
 136        <meta-data
-136-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\8b812dcce44d7b3140aa035b403e75ea\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+136-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\a4c75250bc510e737ebe40757c235b96\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
 137            android:name="com.google.android.gms.version"
-137-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\8b812dcce44d7b3140aa035b403e75ea\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+137-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\a4c75250bc510e737ebe40757c235b96\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
 138            android:value="@integer/google_play_services_version" />
-138-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\8b812dcce44d7b3140aa035b403e75ea\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+138-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\arvin\.gradle\caches\transforms-2\files-2.1\a4c75250bc510e737ebe40757c235b96\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
 139    </application>
 140
 141</manifest>

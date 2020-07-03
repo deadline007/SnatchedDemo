@@ -23,10 +23,19 @@ class ClassFirebaseAuth {
   }
 
   Future<String> signUp() async {
-    final AuthResult result = await _auth.createUserWithEmailAndPassword(
-        email: _userId, password: _password);
-    final FirebaseUser user = result.user;
-    return user.uid;
+    String errorMessage = "NONE";
+    FirebaseUser user;
+    try {
+      final AuthResult result = await _auth.createUserWithEmailAndPassword(
+          email: _userId, password: _password);
+      user = result.user;
+    } catch (error) {
+      errorMessage = error.code.toString();
+    }
+    if (errorMessage == "NONE") {
+      print(user.uid);
+    }
+    return errorMessage;
   }
 
   Future<void> singOut() async {

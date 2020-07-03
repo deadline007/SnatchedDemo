@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_FireBaseAuth.dart';
+import 'package:snatched/Routes/Route_AuthSignUp.dart';
 
 enum userId_error {
   NONE,
@@ -324,7 +325,7 @@ class RouteAuthSignIn extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(
-                      left: widthMax /3,
+                      left: widthMax / 3,
                     ),
                     child: Text(
                       "Nay Account ?",
@@ -334,8 +335,13 @@ class RouteAuthSignIn extends StatelessWidget {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {/* 
-                      Navigator.push(context,) */
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RouteAuthSignUp(),
+                        ),
+                      );
                     },
                     child: Text(
                       "Sign Up!",
