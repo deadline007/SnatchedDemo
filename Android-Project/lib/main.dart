@@ -1,22 +1,30 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Splash.dart';
+import 'package:snatched/Routes/Route_Splash.dart';
 
-void main() => runApp(new MyApp());
-final bool debugShowCheckedModeBanner = true;
+import 'package:snatched/Routes/Route_AuthSignIn.dart';
+import 'package:snatched/Routes/Route_AuthSignUp.dart';
+import 'package:snatched/Routes/Route_AppInfo.dart';
+import 'package:snatched/Routes/Route_Menu.dart';
 
+void main() {
+  runApp(
+    new Main(),
+  );
+}
 
-class MyApp extends StatelessWidget {
-  @override
+class Main extends StatelessWidget {
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      color: Colors.blue,
+    return MaterialApp(
+      initialRoute: '/',
       debugShowCheckedModeBanner: false,
-      home: new Splash(),
-
+      routes: {
+        '/': (context) => RouteSplash(),
+        '/authSignIn': (context) => RouteAuthSignIn(),
+        '/appInfo': (context) => RouteAppInfo(),
+        '/menu': (context) => RouteMenu(),
+        '/authSignUp' :(context) => RouteAuthSignUp(),
+      },
     );
   }
 }
-

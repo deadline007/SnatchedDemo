@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "820343999271",
+    "firebase_url": "https://snatched-d31c3.firebaseio.com",
+    "project_id": "snatched-d31c3",
+    "storage_bucket": "snatched-d31c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820343999271:android:450b4cc94e4fb1975ef702",
+        "android_client_info": {
+          "package_name": "com.snatched.snatched"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820343999271-sg3egrdrc963b39rthld8a3o1cfosmms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snatched.snatched",
+            "certificate_hash": "e32ae2b99070a40577aee9d3a947ee44d0e3d060"
+          }
+        },
+        {
+          "client_id": "820343999271-plbkg6rq79p4hroq7s03ep7s53a1c8m8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPKmGvOlU--qPGy7vX6RIAmfSGbCCGUvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820343999271-plbkg6rq79p4hroq7s03ep7s53a1c8m8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
