@@ -169,14 +169,14 @@ void _paymentOptionSheet(context){
               RawMaterialButton(
                 onPressed: () {},
                 elevation: 2.0,
-                //fillColor: Color.fromRGBO(255, 2, 102,100),
+                fillColor: Color.fromRGBO(255, 2, 102,100),
                 child: Icon(
                   Icons.arrow_back,
-                  color: Color.fromRGBO(255, 2, 102,100),
+                  color: Colors.white,
                   size: 35.0,
                 ),
                 //padding: EdgeInsets.all(10.0),
-//                shape: CircleBorder(),
+               shape: CircleBorder(),
               ),
               SizedBox(
                 height: 100,

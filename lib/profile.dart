@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 class Profile extends StatefulWidget{
   @override
@@ -98,7 +99,10 @@ class _ProfileState  extends State<Profile>{
   color: Color.fromRGBO(255, 2, 102,100),
   elevation: 7.0,
   child: GestureDetector(
-  onTap: () {},
+  onTap: () {Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => LoginPage()));},
   child: Center(
   child: Text(
   'Log out',
