@@ -1,4 +1,0 @@
-#Sat Jul 04 02:33:00 IST 2020
-base.0=C\:\\Users\\arvin\\Documents\\GitHub\\SnatchedDemo\\Android-Project\\build\\app\\intermediates\\transforms\\r8\\release\\0\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
