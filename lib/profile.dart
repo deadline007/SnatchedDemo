@@ -26,19 +26,40 @@ class _ProfileState  extends State<Profile>{
   top: MediaQuery.of(context).size.height / 5,
   child: Column(
   children: <Widget>[
-  Container(
-  width: 150.0,
-  height: 150.0,
-  decoration: BoxDecoration(
-  color: Colors.red,
-  image: DecorationImage(
-  image: NetworkImage(
-  'https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-600w-418179856.jpg'),
-  fit: BoxFit.cover),
-  borderRadius: BorderRadius.all(Radius.circular(75.0)),
-  boxShadow: [
-  BoxShadow(blurRadius: 7.0, color: Colors.black)
-  ])),
+  Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      SizedBox(width: 100),
+      Container(
+          width: 150.0,
+      height: 150.0,
+      decoration: BoxDecoration(
+      color: Colors.red,
+      image: DecorationImage(
+      image: NetworkImage(
+      'https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-600w-418179856.jpg'),
+      fit: BoxFit.cover),
+      borderRadius: BorderRadius.all(Radius.circular(75.0)),
+      boxShadow: [
+      BoxShadow(blurRadius: 7.0, color: Colors.black)
+      ])),
+   Spacer(),
+
+      RawMaterialButton(
+        onPressed: () {},
+        elevation: 2.0,
+        fillColor: Color.fromRGBO(255, 2, 102,100),
+        child: Icon(
+
+          Icons.edit,
+          color: Colors.white,
+          size: 25.0,
+        ),
+        shape: CircleBorder(),
+
+      ),
+    ],
+  ),
   SizedBox(height: 20.0),
   Text(
   'Ankit',
