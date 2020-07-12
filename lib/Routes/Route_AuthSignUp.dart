@@ -21,8 +21,11 @@ class RouteAuthSignUp extends StatelessWidget {
   final double heightMax = ClassScreenConf.vArea;
   final String fontDef = ClassAssetHolder.proximaLight;
   final Color colorDef = ClassAssetHolder.mainColor;
+  final Color colorDef2 = Colors.grey[400];
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
 
   Future<void> submit(BuildContext context) async {
     if (_email.text == "" && _password.text == "") {
@@ -133,7 +136,7 @@ class RouteAuthSignUp extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: heightMin * 20,
+            top: heightMin * 16,
             child: Container(
               height: heightMin * 10,
               width: widthMax,
@@ -151,7 +154,7 @@ class RouteAuthSignUp extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: heightMin * 26,
+            top: heightMin * 24,
             child: Container(
               height: heightMin * 10,
               width: widthMax,
@@ -174,7 +177,7 @@ class RouteAuthSignUp extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: heightMin * 36,
+            top: heightMin * 33,
             child: Container(
               width: widthMax,
               height: heightMin * 32,
@@ -194,12 +197,16 @@ class RouteAuthSignUp extends StatelessWidget {
                           children: <Widget>[
                             Align(
                               alignment: Alignment.topLeft,
+                              child: Text("Yo"),
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
                               child: Text(
                                 "Email",
                                 style: TextStyle(
                                   fontFamily: fontDef,
                                   fontSize: widthMin * 6,
-                                  color: Colors.grey[400],
+                                  color: colorDef2,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -239,7 +246,7 @@ class RouteAuthSignUp extends StatelessWidget {
                                 style: TextStyle(
                                   fontFamily: fontDef,
                                   fontSize: widthMin * 6,
-                                  color: Colors.grey[400],
+                                  color: colorDef2,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
