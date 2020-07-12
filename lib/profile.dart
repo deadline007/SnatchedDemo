@@ -46,7 +46,94 @@ class _ProfileState  extends State<Profile>{
    Spacer(),
 
       RawMaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) => new AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(
+                        Radius.circular(10.0))),
+                content: Builder(
+                  builder: (context) {
+                    var height = MediaQuery.of(context).size.height;
+                    var width = MediaQuery.of(context).size.width;
+
+                    return Container(
+                      height: height/2,
+                      width: width - 40,
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(height: 20.0),
+                          Text(
+                            'Name',
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Color.fromRGBO(255, 2, 102,100),
+                                fontFamily: 'Montserrat'),
+                          ),
+                          SizedBox(height: 5.0),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: TextFormField(),
+                          ),
+//                          Text(
+//                            'Ankit',
+//                            style: TextStyle(
+//                                fontSize: 20.0,
+//                                color: Colors.grey,
+//                                fontFamily: 'Montserrat'),
+//                          ),
+                          SizedBox(height: 5.0,width: 10,),
+                          Text(
+                            'Address',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Color.fromRGBO(255, 2, 102,100),
+//  fontStyle: FontStyle.italic,
+                                fontFamily: 'Montserrat'),
+                          ),
+                          SizedBox(height: 5.0),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: TextFormField(),
+                          ),
+//                          Text(
+//                            'dxfgchgc \n jbjvhch',
+//                            textAlign: TextAlign.left,
+//                            style: TextStyle(
+//                                fontSize: 17.0,
+//                                color: Colors.grey,
+////          fontStyle: FontStyle.italic,
+//                                fontFamily: 'Montserrat'),
+//                          ),
+                          SizedBox(height: 25.0),
+                          Text(
+                            'Mobile Number',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 17.0,
+                                color: Color.fromRGBO(255, 2, 102,100),
+//          fontStyle: FontStyle.italic,
+                                fontFamily: 'Montserrat'),
+                          ),
+                          SizedBox(height: 5.0),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: TextFormField(),
+                          ),
+
+//                      Navigator.of(context).pop();
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+              )
+          );
+        },
         elevation: 2.0,
         fillColor: Color.fromRGBO(255, 2, 102,100),
         child: Icon(
@@ -81,7 +168,7 @@ class _ProfileState  extends State<Profile>{
   ),
   SizedBox(height: 5.0),
     Text(
-      'Gali no 420 \n jbjvhch',
+      'dxfgchgc \n jbjvhch',
       textAlign: TextAlign.left,
       style: TextStyle(
           fontSize: 17.0,

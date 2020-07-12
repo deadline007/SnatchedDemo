@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Widget/BottomNavBarWidget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'home.dart';
 
@@ -11,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // calculate the screen height
+  // calculate the screen heigh
   double screenHeight;
 
   // Set intial mode to login
@@ -105,21 +106,29 @@ class _LoginPageState extends State<LoginPage> {
                         ),
 
                       ),
-                      RawMaterialButton(
-                        onPressed: () {Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => BottomNavBarWidget()));},
-                        elevation: 2.0,
-                        fillColor: Color.fromRGBO(255, 2, 102,100),
-                        child: Icon(
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(),
+                          ),
 
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                          size: 25.0,
-                        ),
-                        padding: EdgeInsets.all(10.0),
-                        shape: CircleBorder(),
+                          RawMaterialButton(
+                            onPressed: () {Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => BottomNavBarWidget()));},
+                            elevation: 2.0,
+                            fillColor: Color.fromRGBO(255, 2, 102,100),
+                            child: Icon(
+
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                              size: 25.0,
+                            ),
+                            padding: EdgeInsets.all(10.0),
+                            shape: CircleBorder(),
+                          ),
+                        ],
                       ),
                     ],
                   )
@@ -149,7 +158,8 @@ class _LoginPageState extends State<LoginPage> {
               child: Text("Sign Up"),
             )
           ],
-        )
+        ),
+        FacebookGoogleLogin()
       ],
     );
   }
@@ -220,7 +230,6 @@ class _LoginPageState extends State<LoginPage> {
                     height: 5,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Expanded(
                         child: Container(),
@@ -243,48 +252,145 @@ class _LoginPageState extends State<LoginPage> {
 
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+//            SizedBox(
+//              height: 20,
+//            ),
+                      Text(
+                        "Already have an account?",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            _authMode = AuthMode.LOGIN;
+                          });
+                        },
+                        textColor: Color.fromRGBO(255, 2, 102, 100),
+                        child: Text("Login"),
+                      )
+                    ],
+                  ),
+                  FacebookGoogleLogin()
+//                  Align(
+//                    alignment: Alignment.bottomCenter,
+//                    child: FlatButton(
+//                      child: Text(
+//                        "Terms & Conditions",
+//                        style: TextStyle(
+//                          color: Colors.grey,
+//                        ),
+//                      ),
+//                      onPressed: () {},
+//                    ),
+//                  ),
                 ],
               ),
             ),
           ),
 //        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              "Already have an account?",
-              style: TextStyle(color: Colors.grey),
-            ),
-            FlatButton(
-              onPressed: () {
-                setState(() {
-                  _authMode = AuthMode.LOGIN;
-                });
-              },
-              textColor: Color.fromRGBO(255, 2, 102, 100),
-              child: Text("Logn"),
-            )
-          ],
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: FlatButton(
-            child: Text(
-              "Terms & Conditions",
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            onPressed: () {},
-          ),
-        ),
+
       ],
     );
   }
+}
 
-
+class FacebookGoogleLogin extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: new LinearGradient(
+                          colors: [
+                            Colors.black12,
+                            Colors.black54,
+                          ],
+                          begin: const FractionalOffset(0.0, 0.0),
+                          end: const FractionalOffset(1.0, 1.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
+                    width: 100.0,
+                    height: 1.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: Text(
+                      "Or",
+                      style: TextStyle(
+                          color: Color(0xFF2c2b2b),
+                          fontSize: 16.0,
+                          fontFamily: "WorkSansMedium"),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: new LinearGradient(
+                          colors: [
+                            Colors.black54,
+                            Colors.black12,
+                          ],
+                          begin: const FractionalOffset(0.0, 0.0),
+                          end: const FractionalOffset(1.0, 1.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
+                    width: 100.0,
+                    height: 1.0,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0, right: 40.0),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(15.0),
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFf7418c),
+                      ),
+                      child: Icon(
+                        FontAwesomeIcons.facebook,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: GestureDetector(
+                    onTap: () => {},
+                    child: Container(
+                      padding: const EdgeInsets.all(15.0),
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFf7418c),
+                      ),
+                      child: new Icon(
+                        FontAwesomeIcons.google,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
+  }
 }

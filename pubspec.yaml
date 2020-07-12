@@ -26,6 +26,7 @@ dependencies:
   after_layout: ^1.0.7+2
   shared_preferences: ^0.5.7+3
   introduction_screen: ^1.0.8
+  font_awesome_flutter: 8.8.1
 #  hexcolor: ^1.0.4
 
 dev_dependencies:
@@ -44,6 +45,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   assets:
