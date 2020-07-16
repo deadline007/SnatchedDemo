@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_FireBaseAuth.dart';
+import 'package:snatched/Utilities/Class_SignUpSliderTheme.dart';
 
 enum userId_error {
   NONE,
@@ -13,19 +14,54 @@ enum password_error {
   NONE,
   NO_PASSWORD_GIVEN,
 }
+enum signUpState {
+  NAME,
+  MOBILE,
+  ADDRESS,
+  EMAIL,
+  PASSWORD,
+}
 
-class RouteAuthSignUp extends StatelessWidget {
+class RouteAuthSignUp extends StatefulWidget {
+  @override
+  _RouteAuthSignUpState createState() => _RouteAuthSignUpState();
+}
+
+class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   final double widthMin = ClassScreenConf.blockH;
+
   final double widthMax = ClassScreenConf.hArea;
+
   final double heightMin = ClassScreenConf.blockV;
+
   final double heightMax = ClassScreenConf.vArea;
+
   final String fontDef = ClassAssetHolder.proximaLight;
+
   final Color colorDef = ClassAssetHolder.mainColor;
+
   final Color colorDef2 = Colors.grey[400];
+
   final TextEditingController _email = TextEditingController();
+
   final TextEditingController _password = TextEditingController();
+
   final TextEditingController _name = TextEditingController();
+
   final TextEditingController _phone = TextEditingController();
+
+  final TextEditingController _addressLine1 = TextEditingController();
+
+  final TextEditingController _addressLine2 = TextEditingController();
+
+  final TextEditingController _addressLine3 = TextEditingController();
+
+  //slider Widget Data
+  final int sliderMin = 0;
+  final int sliderMax = 5;
+  final bool fullSliderWidth = false;
+  final double sliderHeight = ClassScreenConf.blockV * 5;
+  double sliderValue = 0;
 
   Future<void> submit(BuildContext context) async {
     if (_email.text == "" && _password.text == "") {
@@ -83,14 +119,18 @@ class RouteAuthSignUp extends StatelessWidget {
       body: MultiProvider(
         providers: [
           ChangeNotifierProvider<ValueNotifier<userId_error>>(
-            create: (context) => ValueNotifier<userId_error>(userId_error.NONE),
+            create: (_) => ValueNotifier<userId_error>(userId_error.NONE),
           ),
           ChangeNotifierProvider<ValueNotifier<password_error>>(
-            create: (context) =>
-                ValueNotifier<password_error>(password_error.NONE),
+            create: (_) => ValueNotifier<password_error>(password_error.NONE),
           ),
           ChangeNotifierProvider<ValueNotifier<String>>(
-            create: (context) => ValueNotifier<String>("NONE"),
+            create: (_) => ValueNotifier<String>("NONE"),
+          ),
+          ChangeNotifierProvider<ValueNotifier<signUpState>>(
+            create: (_) => ValueNotifier<signUpState>(
+              signUpState.NAME,
+            ),
           )
         ],
         child: Builder(
@@ -177,8 +217,9 @@ class RouteAuthSignUp extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: heightMin * 33,
+            top: heightMin * 34,
             child: Container(
+              color: Colors.black,
               width: widthMax,
               height: heightMin * 32,
               child: Padding(
@@ -189,104 +230,75 @@ class RouteAuthSignUp extends StatelessWidget {
                 child: Card(
                   color: Colors.white,
                   elevation: 0,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        height: heightMin * 15,
-                        child: Column(
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text("Yo"),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Email",
-                                style: TextStyle(
-                                  fontFamily: fontDef,
-                                  fontSize: widthMin * 6,
-                                  color: colorDef2,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: TextField(
-                                controller: _email,
-                                cursorColor: colorDef,
-                                enabled: true,
-                                keyboardType: TextInputType.emailAddress,
-                                autofocus: false,
-                                toolbarOptions: ToolbarOptions(
-                                  copy: true,
-                                  paste: true,
-                                ),
-                                style: TextStyle(
-                                  height: 1.5,
-                                ),
-                              ),
-                            ),
-                            Consumer<ValueNotifier<userId_error>>(
-                              builder: (context, __, _) => userIdError(
-                                context,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: heightMin * 15,
-                        child: Column(
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Password",
-                                style: TextStyle(
-                                  fontFamily: fontDef,
-                                  fontSize: widthMin * 6,
-                                  color: colorDef2,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: TextField(
-                                controller: _password,
-                                obscureText: true,
-                                cursorColor: colorDef,
-                                enabled: true,
-                                keyboardType: TextInputType.visiblePassword,
-                                autofocus: false,
-                                toolbarOptions: ToolbarOptions(
-                                  copy: true,
-                                  paste: true,
-                                ),
-                                style: TextStyle(
-                                  height: 1.5,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: heightMin * 5,
-                              child: Consumer<ValueNotifier<password_error>>(
-                                builder: (context, __, _) => passwordError(
-                                  context,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: Consumer<ValueNotifier<signUpState>>(
+                    builder: (context, value, _) {
+                      return signUpBuild(context, value.value);
+                    },
                   ),
                 ),
               ),
             ),
           ),
           Positioned(
-            top: heightMin * 72,
+            top: heightMin * 66,
+            child: Container(
+              width: widthMax,
+              height: heightMin * 4,
+              child: Center(
+                child: SizedBox(
+                  width: widthMin * 38,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          sliderHeight * 0.3,
+                        ),
+                      ),
+                    ),
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: Colors.black.withOpacity(1),
+                        inactiveTrackColor: Colors.orange,
+                        trackHeight: heightMin * 4,
+                        thumbShape: ClassSignUpSliderTheme(
+                          thumbRadius: heightMin * 4 * 0.4,
+                          min: sliderMin,
+                          max: sliderMax,
+                        ),
+                        overlayColor: Colors.white.withOpacity(0.4),
+                        activeTickMarkColor: Colors.orange[700],
+                        inactiveTickMarkColor: Colors.red.withOpacity(0.7),
+                      ),
+                      child: Slider(
+                        min: sliderMin.toDouble(),
+                        max: 2,
+                        divisions: 2,
+                        value: sliderValue,
+                        onChanged: (value) {
+                          print("sliderval : $value");
+                          setState(
+                            () {
+                              sliderValue = value;
+                            },
+                          );
+                          if (value == signUpState.NAME.index ||
+                              value == signUpState.MOBILE.index) {
+                            final temp =
+                                Provider.of<ValueNotifier<signUpState>>(context,
+                                    listen: false);
+                            temp.value = signUpState.EMAIL;
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: heightMin * 78,
             child: Container(
               width: widthMax,
               child: Center(
@@ -351,5 +363,117 @@ class RouteAuthSignUp extends StatelessWidget {
     } else {
       return Container();
     }
+  }
+
+  Widget signUpBuild(BuildContext context, signUpState state) {
+    print(state.toString());
+    if (state == signUpState.EMAIL || state == signUpState.PASSWORD) {
+      return emailPwd();
+    } else if (state == signUpState.NAME || state == signUpState.MOBILE) {
+      return nameMobile();
+    } else if (state == signUpState.ADDRESS) {
+      return address();
+    } else {
+      return emailPwd();
+    }
+  }
+
+  Widget address() {
+    return Container();
+  }
+
+  Widget nameMobile() {
+    return Container();
+  }
+
+  Widget emailPwd() {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: heightMin * 15,
+          child: Column(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Email",
+                  style: TextStyle(
+                    fontFamily: fontDef,
+                    fontSize: widthMin * 6,
+                    color: colorDef2,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                child: TextField(
+                  controller: _email,
+                  cursorColor: colorDef,
+                  enabled: true,
+                  keyboardType: TextInputType.emailAddress,
+                  autofocus: false,
+                  toolbarOptions: ToolbarOptions(
+                    copy: true,
+                    paste: true,
+                  ),
+                  style: TextStyle(
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              Consumer<ValueNotifier<userId_error>>(
+                builder: (context, __, _) => userIdError(
+                  context,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: heightMin * 15,
+          child: Column(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Password",
+                  style: TextStyle(
+                    fontFamily: fontDef,
+                    fontSize: widthMin * 6,
+                    color: colorDef2,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                child: TextField(
+                  controller: _password,
+                  obscureText: true,
+                  cursorColor: colorDef,
+                  enabled: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  autofocus: false,
+                  toolbarOptions: ToolbarOptions(
+                    copy: true,
+                    paste: true,
+                  ),
+                  style: TextStyle(
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              Container(
+                height: heightMin * 5,
+                child: Consumer<ValueNotifier<password_error>>(
+                  builder: (context, __, _) => passwordError(
+                    context,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
