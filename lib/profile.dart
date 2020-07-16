@@ -65,67 +65,58 @@ class _ProfileState  extends State<Profile>{
                       child: Column(
                         children: <Widget>[
                           SizedBox(height: 20.0),
-                          Text(
-                            'Name',
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color.fromRGBO(255, 2, 102,100),
-                                fontFamily: 'Montserrat'),
-                          ),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: TextFormField(),
-                          ),
 //                          Text(
-//                            'Ankit',
+//                            'Name',
 //                            style: TextStyle(
 //                                fontSize: 20.0,
-//                                color: Colors.grey,
+//                                color: Color.fromRGBO(255, 2, 102,100),
 //                                fontFamily: 'Montserrat'),
 //                          ),
-                          SizedBox(height: 5.0,width: 10,),
-                          Text(
-                            'Address',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color.fromRGBO(255, 2, 102,100),
-//  fontStyle: FontStyle.italic,
-                                fontFamily: 'Montserrat'),
+//                          SizedBox(height: 5.0),
+                          TextFormField(
+                            decoration: InputDecoration(
+                                labelText: "Name"),
                           ),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: TextFormField(),
-                          ),
+                          SizedBox(height: 20.0),
 //                          Text(
-//                            'dxfgchgc \n jbjvhch',
+//                            'Address',
 //                            textAlign: TextAlign.left,
 //                            style: TextStyle(
-//                                fontSize: 17.0,
-//                                color: Colors.grey,
-////          fontStyle: FontStyle.italic,
+//                                fontSize: 20.0,
+//                                color: Color.fromRGBO(255, 2, 102,100),
+////  fontStyle: FontStyle.italic,
 //                                fontFamily: 'Montserrat'),
 //                          ),
-                          SizedBox(height: 25.0),
-                          Text(
-                            'Mobile Number',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 17.0,
-                                color: Color.fromRGBO(255, 2, 102,100),
-//          fontStyle: FontStyle.italic,
-                                fontFamily: 'Montserrat'),
+
+                          TextFormField(
+                            decoration: InputDecoration(
+                                labelText: "Address"),
                           ),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: TextFormField(),
+
+                          SizedBox(height: 20.0),
+                          TextFormField(
+                            decoration: InputDecoration(
+                                labelText: "Mobile Number", fillColor: Color.fromRGBO(255, 2, 102,100),hoverColor: Color.fromRGBO(255, 2, 102,100)),
+                          ),
+                          SizedBox(height: 80,),
+                          Row(
+                            children: <Widget>[
+                              Spacer(),
+                              RawMaterialButton(
+                                onPressed: (){Navigator.of(context).pop();},
+                                child: Icon(
+
+                                  Icons.check,
+                                  color: Color.fromRGBO(255, 2, 102,100),
+                                  size: 30,
+                                ),
+                              ),
+                            ],
                           ),
 
 //                      Navigator.of(context).pop();
                         ],
+
                       ),
                     );
                   },
