@@ -58,7 +58,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
 
   //slider Widget Data
   final int sliderMin = 0;
-  final int sliderMax = 5;
+  final int sliderMax = 2;
   final bool fullSliderWidth = false;
   final double sliderHeight = ClassScreenConf.blockV * 5;
   double sliderValue = 0;
@@ -217,23 +217,44 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             ),
           ),
           Positioned(
-            top: heightMin * 34,
+            top: heightMin * 32,
             child: Container(
-              color: Colors.black,
               width: widthMax,
-              height: heightMin * 32,
+              height: heightMin * 35,
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: widthMin * 12,
-                  right: widthMin * 12,
+                  left: widthMin * 10,
+                  right: widthMin * 10,
                 ),
                 child: Card(
                   color: Colors.white,
-                  elevation: 0,
-                  child: Consumer<ValueNotifier<signUpState>>(
-                    builder: (context, value, _) {
-                      return signUpBuild(context, value.value);
-                    },
+                  elevation: 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          5,
+                        ),
+                      ),
+                      border: Border.all(
+                        color: Colors.black.withOpacity(
+                          0.2,
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: widthMin * 3,
+                        top: heightMin * 3,
+                        right: widthMin * 3,
+                      ),
+                      child: Consumer<ValueNotifier<signUpState>>(
+                        builder: (context, value, _) {
+                          return signUpBuild(context, value.value);
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -249,7 +270,6 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                   width: widthMin * 38,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.blue,
                       borderRadius: BorderRadius.all(
                         Radius.circular(
                           sliderHeight * 0.3,
@@ -258,8 +278,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                     ),
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: Colors.black.withOpacity(1),
-                        inactiveTrackColor: Colors.orange,
+                        activeTrackColor: Colors.transparent,
+                        inactiveTrackColor: Colors.transparent,
                         trackHeight: heightMin * 4,
                         thumbShape: ClassSignUpSliderTheme(
                           thumbRadius: heightMin * 4 * 0.4,
@@ -268,11 +288,11 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                         ),
                         overlayColor: Colors.white.withOpacity(0.4),
                         activeTickMarkColor: Colors.orange[700],
-                        inactiveTickMarkColor: Colors.red.withOpacity(0.7),
+                        inactiveTickMarkColor: Colors.orange[400],
                       ),
                       child: Slider(
                         min: sliderMin.toDouble(),
-                        max: 2,
+                        max: sliderMax.toDouble(),
                         divisions: 2,
                         value: sliderValue,
                         onChanged: (value) {
@@ -282,11 +302,14 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                               sliderValue = value;
                             },
                           );
-                          if (value == signUpState.NAME.index ||
-                              value == signUpState.MOBILE.index) {
-                            final temp =
-                                Provider.of<ValueNotifier<signUpState>>(context,
-                                    listen: false);
+                          final temp = Provider.of<ValueNotifier<signUpState>>(
+                              context,
+                              listen: false);
+                          if (value == 0) {
+                            temp.value = signUpState.NAME;
+                          } else if (value == 1) {
+                            temp.value = signUpState.ADDRESS;
+                          } else {
                             temp.value = signUpState.EMAIL;
                           }
                         },

@@ -25,14 +25,15 @@ class ClassSignUpSliderTheme extends SliderComponentShape {
       double value}) {
     final Canvas canvas = context.canvas;
     final Paint paint = Paint()
-      ..color = Colors.black
+      ..color = Color(0xFFFE0265)
       ..style = PaintingStyle.fill;
 
     TextSpan span = TextSpan(
+      text: "${getValue(value)}",
       style: TextStyle(
         fontSize: thumbRadius * 0.8,
         fontWeight: FontWeight.w700,
-        color: sliderTheme.thumbColor,
+        color: Colors.orange[400],
       ),
     );
 
