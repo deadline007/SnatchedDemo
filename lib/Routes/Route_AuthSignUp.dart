@@ -46,7 +46,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
 
   final TextEditingController _password = TextEditingController();
 
-  final TextEditingController _name = TextEditingController();
+  final TextEditingController _firstName = TextEditingController();
+  final TextEditingController _lastName = TextEditingController();
 
   final TextEditingController _phone = TextEditingController();
 
@@ -55,6 +56,17 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   final TextEditingController _addressLine2 = TextEditingController();
 
   final TextEditingController _addressLine3 = TextEditingController();
+
+  TextStyle textStyleDef;
+
+  _RouteAuthSignUpState() {
+    textStyleDef = TextStyle(
+      fontFamily: fontDef,
+      fontSize: widthMin * 6,
+      color: colorDef2,
+      fontWeight: FontWeight.bold,
+    );
+  }
 
   //slider Widget Data
   final int sliderMin = 0;
@@ -401,12 +413,195 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     }
   }
 
-  Widget address() {
-    return Container();
+  Widget nameMobile() {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: heightMin * 15,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: widthMin * 30,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      "First name",
+                      style: textStyleDef,
+                    ),
+                    TextField(
+                      controller: _firstName,
+                      cursorColor: colorDef,
+                      enabled: true,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      toolbarOptions: ToolbarOptions(
+                        copy: true,
+                        paste: true,
+                      ),
+                      style: TextStyle(
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: widthMin * 8,
+                ),
+                child: Container(
+                  width: widthMin * 32,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Last Name",
+                        style: textStyleDef,
+                      ),
+                      TextField(
+                        controller: _lastName,
+                        cursorColor: colorDef,
+                        enabled: true,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        toolbarOptions: ToolbarOptions(
+                          copy: true,
+                          paste: true,
+                        ),
+                        style: TextStyle(
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: widthMin * 50,
+          child: Column(
+            children: <Widget>[
+              Text(
+                "Phone Number",
+                style: textStyleDef,
+              ),
+              TextField(
+                controller: _firstName,
+                cursorColor: colorDef,
+                enabled: true,
+                keyboardType: TextInputType.phone,
+                autofocus: false,
+                toolbarOptions: ToolbarOptions(
+                  copy: true,
+                  paste: true,
+                ),
+                style: TextStyle(
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget nameMobile() {
-    return Container();
+  Widget address() {
+    return Container(
+      width: widthMin * 60,
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Address Line 1",
+              style: textStyleDef,
+            ),
+          ),
+          Positioned(
+            top: heightMin * 2,
+            child: Container(
+              width: widthMin * 70,
+              child: TextField(
+                textAlign: TextAlign.left,
+                controller: _addressLine1,
+                cursorColor: colorDef,
+                enabled: true,
+                keyboardType: TextInputType.text,
+                autofocus: false,
+                toolbarOptions: ToolbarOptions(
+                  copy: true,
+                  paste: true,
+                ),
+                style: TextStyle(
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: heightMin * 10,
+            left: 0,
+            child: Text(
+              "Address Line 2",
+              style: textStyleDef,
+            ),
+          ),
+          Positioned(
+            top: heightMin * 12,
+            child: Container(
+              width: widthMin * 70,
+              child: TextField(
+                textAlign: TextAlign.left,
+                controller: _addressLine2,
+                cursorColor: colorDef,
+                enabled: true,
+                keyboardType: TextInputType.text,
+                autofocus: false,
+                toolbarOptions: ToolbarOptions(
+                  copy: true,
+                  paste: true,
+                ),
+                style: TextStyle(
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: heightMin * 20,
+            left: 0,
+            child: Text(
+              "Address Line 3",
+              style: textStyleDef,
+            ),
+          ),
+          Positioned(
+            top: heightMin * 21,
+            child: Container(
+              width: widthMin * 70,
+              child: TextField(
+                textAlign: TextAlign.left,
+                controller: _addressLine3,
+                cursorColor: colorDef,
+                enabled: true,
+                keyboardType: TextInputType.text,
+                autofocus: false,
+                toolbarOptions: ToolbarOptions(
+                  copy: true,
+                  paste: true,
+                ),
+                style: TextStyle(
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget emailPwd() {
@@ -420,12 +615,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Email",
-                  style: TextStyle(
-                    fontFamily: fontDef,
-                    fontSize: widthMin * 6,
-                    color: colorDef2,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: textStyleDef,
                 ),
               ),
               Container(
@@ -460,12 +650,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Password",
-                  style: TextStyle(
-                    fontFamily: fontDef,
-                    fontSize: widthMin * 6,
-                    color: colorDef2,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: textStyleDef,
                 ),
               ),
               Container(
