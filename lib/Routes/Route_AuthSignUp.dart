@@ -22,6 +22,24 @@ enum signUpState {
   PASSWORD,
 }
 
+enum phone_error {
+  NONE,
+  NO_PHONE_NUMBER_GIVEN,
+  INVALID_PHONE_NUMBER,
+}
+
+enum address_error {
+  NONE,
+  NO_ADDRESS_GIVEN,
+  INVALID_ADDRESS_GIVEN,
+}
+
+enum name_error {
+  NONE,
+  NO_NAME_GIVEN,
+  FIRST_NAME_NOT_GIVEN,
+}
+
 class RouteAuthSignUp extends StatefulWidget {
   @override
   _RouteAuthSignUpState createState() => _RouteAuthSignUpState();
@@ -123,6 +141,25 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     final errorPassword =
         Provider.of<ValueNotifier<password_error>>(context, listen: false);
     errorPassword.value = password_error.NO_PASSWORD_GIVEN;
+  }
+
+  TextField textFieldGen(TextEditingController clr, TextInputType tIn,
+      {bool hidden = false}) {
+    return TextField(
+      controller: clr,
+      obscureText: hidden,
+      cursorColor: colorDef,
+      enabled: true,
+      keyboardType: tIn,
+      autofocus: false,
+      toolbarOptions: ToolbarOptions(
+        copy: true,
+        paste: true,
+      ),
+      style: TextStyle(
+        height: 1.5,
+      ),
+    );
   }
 
   @override
@@ -428,20 +465,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                       "First name",
                       style: textStyleDef,
                     ),
-                    TextField(
-                      controller: _firstName,
-                      cursorColor: colorDef,
-                      enabled: true,
-                      keyboardType: TextInputType.text,
-                      autofocus: false,
-                      toolbarOptions: ToolbarOptions(
-                        copy: true,
-                        paste: true,
-                      ),
-                      style: TextStyle(
-                        height: 1.5,
-                      ),
-                    ),
+                    textFieldGen(_firstName, TextInputType.text),
                   ],
                 ),
               ),
@@ -457,20 +481,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                         "Last Name",
                         style: textStyleDef,
                       ),
-                      TextField(
-                        controller: _lastName,
-                        cursorColor: colorDef,
-                        enabled: true,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        toolbarOptions: ToolbarOptions(
-                          copy: true,
-                          paste: true,
-                        ),
-                        style: TextStyle(
-                          height: 1.5,
-                        ),
-                      ),
+                      textFieldGen(_lastName, TextInputType.text),
                     ],
                   ),
                 ),
@@ -486,20 +497,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 "Phone Number",
                 style: textStyleDef,
               ),
-              TextField(
-                controller: _firstName,
-                cursorColor: colorDef,
-                enabled: true,
-                keyboardType: TextInputType.phone,
-                autofocus: false,
-                toolbarOptions: ToolbarOptions(
-                  copy: true,
-                  paste: true,
-                ),
-                style: TextStyle(
-                  height: 1.5,
-                ),
-              ),
+              textFieldGen(_phone, TextInputType.phone),
             ],
           ),
         ),
@@ -516,7 +514,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Address Line 1",
+              "Address Line 1*",
               style: textStyleDef,
             ),
           ),
@@ -524,21 +522,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             top: heightMin * 2,
             child: Container(
               width: widthMin * 70,
-              child: TextField(
-                textAlign: TextAlign.left,
-                controller: _addressLine1,
-                cursorColor: colorDef,
-                enabled: true,
-                keyboardType: TextInputType.text,
-                autofocus: false,
-                toolbarOptions: ToolbarOptions(
-                  copy: true,
-                  paste: true,
-                ),
-                style: TextStyle(
-                  height: 1.5,
-                ),
-              ),
+              child: textFieldGen(_addressLine1, TextInputType.text),
             ),
           ),
           Positioned(
@@ -553,21 +537,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             top: heightMin * 12,
             child: Container(
               width: widthMin * 70,
-              child: TextField(
-                textAlign: TextAlign.left,
-                controller: _addressLine2,
-                cursorColor: colorDef,
-                enabled: true,
-                keyboardType: TextInputType.text,
-                autofocus: false,
-                toolbarOptions: ToolbarOptions(
-                  copy: true,
-                  paste: true,
-                ),
-                style: TextStyle(
-                  height: 1.5,
-                ),
-              ),
+              child: textFieldGen(_addressLine2, TextInputType.text),
             ),
           ),
           Positioned(
@@ -582,20 +552,15 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             top: heightMin * 21,
             child: Container(
               width: widthMin * 70,
-              child: TextField(
-                textAlign: TextAlign.left,
-                controller: _addressLine3,
-                cursorColor: colorDef,
-                enabled: true,
-                keyboardType: TextInputType.text,
-                autofocus: false,
-                toolbarOptions: ToolbarOptions(
-                  copy: true,
-                  paste: true,
-                ),
-                style: TextStyle(
-                  height: 1.5,
-                ),
+              child: Column(
+                children: <Widget>[
+                  textFieldGen(_addressLine3, TextInputType.text),
+                  Consumer<ValueNotifier<userId_error>>(
+                    builder: (context, __, _) => userIdError(
+                      context,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -619,20 +584,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 ),
               ),
               Container(
-                child: TextField(
-                  controller: _email,
-                  cursorColor: colorDef,
-                  enabled: true,
-                  keyboardType: TextInputType.emailAddress,
-                  autofocus: false,
-                  toolbarOptions: ToolbarOptions(
-                    copy: true,
-                    paste: true,
-                  ),
-                  style: TextStyle(
-                    height: 1.5,
-                  ),
-                ),
+                child: textFieldGen(_addressLine1, TextInputType.emailAddress),
               ),
               Consumer<ValueNotifier<userId_error>>(
                 builder: (context, __, _) => userIdError(
@@ -654,20 +606,10 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 ),
               ),
               Container(
-                child: TextField(
-                  controller: _password,
-                  obscureText: true,
-                  cursorColor: colorDef,
-                  enabled: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  autofocus: false,
-                  toolbarOptions: ToolbarOptions(
-                    copy: true,
-                    paste: true,
-                  ),
-                  style: TextStyle(
-                    height: 1.5,
-                  ),
+                child: textFieldGen(
+                  _password,
+                  TextInputType.text,
+                  hidden: true,
                 ),
               ),
               Container(
