@@ -94,6 +94,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   double sliderValue = 0;
 
   Future<void> submit(BuildContext context) async {
+    int flag = inputDetailsSubmit(context);
     if (_email.text == "" && _password.text == "") {
       userIdErrorDisplay(context);
       passwordErrorDisplay(context);
@@ -102,6 +103,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
       passwordErrorDisplay(context);
     } else if (_email.text == "") {
       userIdErrorDisplay(context);
+    } else if (flag == 1) {
+      return;
     } else {
       final authSubmit = ClassFirebaseAuth(_email.text, _password.text);
       final submitResult = await authSubmit.signUp();
@@ -119,6 +122,46 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     }
   }
 
+  int inputDetailsSubmit(BuildContext context) {
+    final errorAddress =
+        Provider.of<ValueNotifier<address_error>>(context, listen: false);
+
+    final errorName =
+        Provider.of<ValueNotifier<name_error>>(context, listen: false);
+
+    final errorPhone =
+        Provider.of<ValueNotifier<phone_error>>(context, listen: false);
+
+    int flag = 0;
+    if (_firstName.text == "" && _lastName.text == "") {
+      errorName.value = name_error.NO_NAME_GIVEN;
+      flag = 1;
+    } else if (_firstName.text == "") {
+      errorName.value = name_error.FIRST_NAME_NOT_GIVEN;
+      flag = 1;
+    }
+    if (_phone.text == "") {
+      errorPhone.value = phone_error.NO_PHONE_NUMBER_GIVEN;
+      flag = 1;
+    } else if (_phone.text.length != 10) {
+      errorPhone.value = phone_error.INVALID_PHONE_NUMBER;
+      flag = 1;
+    }
+    if (_addressLine1.text == "" &&
+        _addressLine2.text == "" &&
+        _addressLine3.text == "") {
+      errorAddress.value = address_error.NO_ADDRESS_GIVEN;
+      flag = 1;
+    } else if (_addressLine2.text == "" || _addressLine1.text == "") {
+      errorAddress.value = address_error.INVALID_ADDRESS_GIVEN;
+      flag = 1;
+    }
+    if (flag == 1) {
+      return 1;
+    }
+    return 0;
+  }
+
   void resetDisplay(BuildContext context) {
     final errorUserId =
         Provider.of<ValueNotifier<userId_error>>(context, listen: false);
@@ -129,6 +172,16 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     final errorCode =
         Provider.of<ValueNotifier<String>>(context, listen: false);
     errorCode.value = "NONE";
+
+    final errorAddress =
+        Provider.of<ValueNotifier<address_error>>(context, listen: false);
+    errorAddress.value = address_error.NONE;
+    final errorName =
+        Provider.of<ValueNotifier<name_error>>(context, listen: false);
+    errorName.value = name_error.NONE;
+    final errorPhone =
+        Provider.of<ValueNotifier<phone_error>>(context, listen: false);
+    errorPhone.value = phone_error.NONE;
   }
 
   void userIdErrorDisplay(BuildContext context) {
@@ -180,7 +233,22 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             create: (_) => ValueNotifier<signUpState>(
               signUpState.NAME,
             ),
-          )
+          ),
+          ChangeNotifierProvider<ValueNotifier<name_error>>(
+            create: (_) => ValueNotifier<name_error>(
+              name_error.NONE,
+            ),
+          ),
+          ChangeNotifierProvider<ValueNotifier<phone_error>>(
+            create: (_) => ValueNotifier<phone_error>(
+              phone_error.NONE,
+            ),
+          ),
+          ChangeNotifierProvider<ValueNotifier<address_error>>(
+            create: (_) => ValueNotifier<address_error>(
+              address_error.NONE,
+            ),
+          ),
         ],
         child: Builder(
           builder: (context) => buildContainer(
@@ -300,7 +368,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                       ),
                       child: Consumer<ValueNotifier<signUpState>>(
                         builder: (context, value, _) {
-                          return signUpBuild(context, value.value);
+                          return signUpScroller(context, value.value);
                         },
                       ),
                     ),
@@ -345,7 +413,6 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                         divisions: 2,
                         value: sliderValue,
                         onChanged: (value) {
-                          print("sliderval : $value");
                           setState(
                             () {
                               sliderValue = value;
@@ -437,7 +504,72 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     }
   }
 
-  Widget signUpBuild(BuildContext context, signUpState state) {
+  Widget nameError(BuildContext context) {
+    final errorDisplay =
+        Provider.of<ValueNotifier<name_error>>(context, listen: false);
+    if (errorDisplay.value == name_error.NONE) {
+      return Container();
+    } else if (errorDisplay.value == name_error.NO_NAME_GIVEN) {
+      return Text(
+        "Please enter your name.",
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      );
+    } else if (errorDisplay.value == name_error.FIRST_NAME_NOT_GIVEN) {
+      return Text(
+        "Please enter your first name.",
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget addressError(BuildContext context) {
+    final errorDisplay =
+        Provider.of<ValueNotifier<address_error>>(context, listen: false);
+    if (errorDisplay.value == address_error.NONE) {
+      return Container();
+    } else if (errorDisplay.value == address_error.NO_ADDRESS_GIVEN) {
+      return Text(
+        "Please enter your address.",
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      );
+    } else if (errorDisplay.value == address_error.INVALID_ADDRESS_GIVEN) {
+      return Text(
+        "Please fill the address 1 and address 2",
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget phoneError(BuildContext context) {
+    final errorDisplay =
+        Provider.of<ValueNotifier<phone_error>>(context, listen: false);
+    if (errorDisplay.value == phone_error.NONE) {
+      return Container();
+    } else if (errorDisplay.value == phone_error.NO_PHONE_NUMBER_GIVEN) {
+      return Text(
+        "Please enter a phone number.",
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget signUpScroller(BuildContext context, signUpState state) {
     print(state.toString());
     if (state == signUpState.EMAIL || state == signUpState.PASSWORD) {
       return emailPwd();
@@ -466,6 +598,11 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                       style: textStyleDef,
                     ),
                     textFieldGen(_firstName, TextInputType.text),
+                    Consumer<ValueNotifier<name_error>>(
+                      builder: (context, __, _) => nameError(
+                        context,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -498,6 +635,11 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 style: textStyleDef,
               ),
               textFieldGen(_phone, TextInputType.phone),
+              Consumer<ValueNotifier<phone_error>>(
+                builder: (context, __, _) => phoneError(
+                  context,
+                ),
+              ),
             ],
           ),
         ),
@@ -529,7 +671,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             top: heightMin * 10,
             left: 0,
             child: Text(
-              "Address Line 2",
+              "Address Line 2*",
               style: textStyleDef,
             ),
           ),
@@ -555,8 +697,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
               child: Column(
                 children: <Widget>[
                   textFieldGen(_addressLine3, TextInputType.text),
-                  Consumer<ValueNotifier<userId_error>>(
-                    builder: (context, __, _) => userIdError(
+                  Consumer<ValueNotifier<address_error>>(
+                    builder: (context, __, _) => addressError(
                       context,
                     ),
                   ),
