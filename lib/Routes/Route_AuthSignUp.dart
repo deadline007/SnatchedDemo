@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +42,12 @@ enum name_error {
   FIRST_NAME_NOT_GIVEN,
 }
 
+enum emailConfStatus {
+  NONE,
+  VERIFIED,
+  VERIFY_PENDING,
+}
+
 class RouteAuthSignUp extends StatefulWidget {
   @override
   _RouteAuthSignUpState createState() => _RouteAuthSignUpState();
@@ -74,6 +82,18 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   final TextEditingController _addressLine2 = TextEditingController();
 
   final TextEditingController _addressLine3 = TextEditingController();
+  final StreamController<emailConfStatus> verificationStreamController =
+      StreamController<emailConfStatus>();
+
+  Stream verificationStream;
+  Timer verifierTimer;
+
+  void dispose() {
+    verifierTimer.cancel();
+    verificationStreamController.close();
+
+    super.dispose();
+  }
 
   TextStyle textStyleDef;
 
@@ -84,7 +104,10 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
       color: colorDef2,
       fontWeight: FontWeight.bold,
     );
+    verificationStream = verificationStreamController.stream;
   }
+
+  void verifierTimerFunction() {}
 
   //slider Widget Data
   final int sliderMin = 0;
@@ -108,11 +131,26 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     } else {
       final authSubmit = ClassFirebaseAuth(_email.text, _password.text);
       final submitResult = await authSubmit.signUp();
+
       if (submitResult == "NONE") {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/menu',
-          (_) => false,
+        await authSubmit.sendEmailConf();
+        verificationStreamController.sink.add(emailConfStatus.VERIFY_PENDING);
+        verifierTimer = Timer.periodic(
+          Duration(milliseconds: 200),
+          (_) async {
+            if (await authSubmit.verificationStatus()) {
+              verificationStreamController.sink.add(emailConfStatus.VERIFIED);
+
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/menu',
+                (_) => false,
+              );
+            } else {
+              verificationStreamController.sink
+                  .add(emailConfStatus.VERIFY_PENDING);
+            }
+          },
         );
       } else {
         final errorCode =
@@ -432,6 +470,46 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                       ),
                     ),
                   ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: heightMin * 72,
+            child: Container(
+              width: widthMax,
+              height: heightMin * 10,
+              child: Center(
+                child: StreamBuilder(
+                  stream: verificationStream,
+                  initialData: emailConfStatus.NONE,
+                  builder: (
+                    _,
+                    snapshot,
+                  ) {
+                    if (snapshot.data == emailConfStatus.VERIFIED) {
+                      return Container(
+                        child: Text(
+                          "Thank you for verification. ",
+                          style: TextStyle(
+                            color: Colors.green[300],
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.data ==
+                        emailConfStatus.VERIFY_PENDING) {
+                      return Container(
+                        child: Text(
+                          "Please check your email for verification.",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
               ),
             ),
