@@ -117,6 +117,11 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   double sliderValue = 0;
 
   Future<void> submit(BuildContext context) async {
+    if (sliderValue < 1) {
+      sliderValue += 1;
+      setState(() {});
+      return;
+    }
     int flag = inputDetailsSubmit(context);
     if (_email.text == "" && _password.text == "") {
       userIdErrorDisplay(context);
@@ -804,7 +809,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 ),
               ),
               Container(
-                child: textFieldGen(_addressLine1, TextInputType.emailAddress),
+                child: textFieldGen(_email, TextInputType.emailAddress),
               ),
               Consumer<ValueNotifier<userId_error>>(
                 builder: (context, __, _) => userIdError(
