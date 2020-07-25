@@ -84,6 +84,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   final TextEditingController _addressLine3 = TextEditingController();
   final StreamController<emailConfStatus> verificationStreamController =
       StreamController<emailConfStatus>();
+  BuildContext ctxBackup;
 
   Stream verificationStream;
   Timer verifierTimer;
@@ -91,7 +92,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   void dispose() {
     verifierTimer.cancel();
     verificationStreamController.close();
-
+    
     super.dispose();
   }
 
@@ -117,9 +118,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   double sliderValue = 0;
 
   Future<void> submit(BuildContext context) async {
-    if (sliderValue < 1) {
-      sliderValue += 1;
-      setState(() {});
+    if (sliderValue < 2) {
+      sliderFunction(sliderValue + 1);
       return;
     }
     int flag = inputDetailsSubmit(context);
@@ -143,6 +143,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
         verifierTimer = Timer.periodic(
           Duration(milliseconds: 200),
           (_) async {
+            print("Verifying...");
             if (await authSubmit.verificationStatus()) {
               verificationStreamController.sink.add(emailConfStatus.VERIFIED);
 
@@ -205,7 +206,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     return 0;
   }
 
-  void resetDisplay(BuildContext context) {
+  /* void resetDisplay(BuildContext context) {
     final errorUserId =
         Provider.of<ValueNotifier<userId_error>>(context, listen: false);
     errorUserId.value = userId_error.NONE;
@@ -225,7 +226,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     final errorPhone =
         Provider.of<ValueNotifier<phone_error>>(context, listen: false);
     errorPhone.value = phone_error.NONE;
-  }
+  } */
 
   void userIdErrorDisplay(BuildContext context) {
     final errorUserId =
@@ -256,6 +257,23 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
         height: 1.5,
       ),
     );
+  }
+
+  sliderFunction(double value) {
+    setState(
+      () {
+        sliderValue = value;
+      },
+    );
+    final temp =
+        Provider.of<ValueNotifier<signUpState>>(ctxBackup, listen: false);
+    if (value == 0) {
+      temp.value = signUpState.NAME;
+    } else if (value == 1) {
+      temp.value = signUpState.ADDRESS;
+    } else {
+      temp.value = signUpState.EMAIL;
+    }
   }
 
   @override
@@ -455,23 +473,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                         max: sliderMax.toDouble(),
                         divisions: 2,
                         value: sliderValue,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              sliderValue = value;
-                            },
-                          );
-                          final temp = Provider.of<ValueNotifier<signUpState>>(
-                              context,
-                              listen: false);
-                          if (value == 0) {
-                            temp.value = signUpState.NAME;
-                          } else if (value == 1) {
-                            temp.value = signUpState.ADDRESS;
-                          } else {
-                            temp.value = signUpState.EMAIL;
-                          }
-                        },
+                        onChanged: sliderFunction,
                       ),
                     ),
                   ),
@@ -537,7 +539,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            resetDisplay(context);
+                            ctxBackup=context;
+                            
                             submit(context);
                           },
                         ),
