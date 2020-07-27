@@ -35,6 +35,7 @@ class ClassFirebaseAuth {
     if (errorMessage == "NONE") {
       print(user.uid);
     }
+
     return errorMessage;
   }
 
@@ -49,11 +50,19 @@ class ClassFirebaseAuth {
 
   Future<bool> verificationStatus() async {
     final FirebaseUser user = await _auth.currentUser();
-    return user.isEmailVerified;
+    print("Signed In , any error : ${await signIn()}");
+    print("Current user email: ${user.email}");
+    if (user.isEmailVerified) {
+      print("Verified : true");
+      return true;
+    } else {
+      print("Verified : false");
+      return false;
+    }
   }
 
-  Future<FirebaseUser> getCurrentUser() async {
+  static Future<String> getCurrentUser() async {
     final FirebaseUser user = await _auth.currentUser();
-    return user;
+    return user.uid;
   }
 }

@@ -7,6 +7,7 @@ import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_FireBaseAuth.dart';
 import 'package:snatched/Utilities/Class_SignUpSliderTheme.dart';
+import 'package:snatched/Utilities/Class_FireStoreUserInfoStorage.dart';
 
 enum userId_error {
   NONE,
@@ -84,6 +85,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   final TextEditingController _addressLine3 = TextEditingController();
   final StreamController<emailConfStatus> verificationStreamController =
       StreamController<emailConfStatus>();
+  BuildContext ctxBackup;
 
   Stream verificationStream;
   Timer verifierTimer;
@@ -91,7 +93,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   void dispose() {
     verifierTimer.cancel();
     verificationStreamController.close();
-
+    print("Signup disposed successfully .");
     super.dispose();
   }
 
@@ -117,6 +119,10 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   double sliderValue = 0;
 
   Future<void> submit(BuildContext context) async {
+    if (sliderValue < 2) {
+      sliderFunction(sliderValue + 1);
+      return;
+    }
     int flag = inputDetailsSubmit(context);
     if (_email.text == "" && _password.text == "") {
       userIdErrorDisplay(context);
@@ -136,11 +142,21 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
         await authSubmit.sendEmailConf();
         verificationStreamController.sink.add(emailConfStatus.VERIFY_PENDING);
         verifierTimer = Timer.periodic(
-          Duration(milliseconds: 200),
+          Duration(seconds: 10),
           (_) async {
+            print("Verifying...");
             if (await authSubmit.verificationStatus()) {
               verificationStreamController.sink.add(emailConfStatus.VERIFIED);
-
+              print("Verified !");
+              ClassFireStoreUserInfoStorage(
+                      firstName: _firstName.text,
+                      lastName: _lastName.text,
+                      phone: int.tryParse(_phone.text),
+                      email: _email.text,
+                      address1: _addressLine1.text,
+                      address2: _addressLine2.text,
+                      address3: _addressLine3.text)
+                  .storeIntoFireStore();
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 '/menu',
@@ -251,6 +267,23 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
         height: 1.5,
       ),
     );
+  }
+
+  sliderFunction(double value) {
+    setState(
+      () {
+        sliderValue = value;
+      },
+    );
+    final temp =
+        Provider.of<ValueNotifier<signUpState>>(ctxBackup, listen: false);
+    if (value == 0) {
+      temp.value = signUpState.NAME;
+    } else if (value == 1) {
+      temp.value = signUpState.ADDRESS;
+    } else {
+      temp.value = signUpState.EMAIL;
+    }
   }
 
   @override
@@ -450,23 +483,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                         max: sliderMax.toDouble(),
                         divisions: 2,
                         value: sliderValue,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              sliderValue = value;
-                            },
-                          );
-                          final temp = Provider.of<ValueNotifier<signUpState>>(
-                              context,
-                              listen: false);
-                          if (value == 0) {
-                            temp.value = signUpState.NAME;
-                          } else if (value == 1) {
-                            temp.value = signUpState.ADDRESS;
-                          } else {
-                            temp.value = signUpState.EMAIL;
-                          }
-                        },
+                        onChanged: sliderFunction,
                       ),
                     ),
                   ),
@@ -532,7 +549,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            resetDisplay(context);
+                            ctxBackup = context;
+
                             submit(context);
                           },
                         ),
@@ -804,7 +822,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                 ),
               ),
               Container(
-                child: textFieldGen(_addressLine1, TextInputType.emailAddress),
+                child: textFieldGen(_email, TextInputType.emailAddress),
               ),
               Consumer<ValueNotifier<userId_error>>(
                 builder: (context, __, _) => userIdError(
