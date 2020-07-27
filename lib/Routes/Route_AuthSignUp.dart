@@ -7,6 +7,7 @@ import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_FireBaseAuth.dart';
 import 'package:snatched/Utilities/Class_SignUpSliderTheme.dart';
+import 'package:snatched/Utilities/Class_FireStoreUserInfoStorage.dart';
 
 enum userId_error {
   NONE,
@@ -92,7 +93,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   void dispose() {
     verifierTimer.cancel();
     verificationStreamController.close();
-    
+    print("Signup disposed successfully .");
     super.dispose();
   }
 
@@ -141,12 +142,21 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
         await authSubmit.sendEmailConf();
         verificationStreamController.sink.add(emailConfStatus.VERIFY_PENDING);
         verifierTimer = Timer.periodic(
-          Duration(milliseconds: 200),
+          Duration(seconds: 10),
           (_) async {
             print("Verifying...");
             if (await authSubmit.verificationStatus()) {
               verificationStreamController.sink.add(emailConfStatus.VERIFIED);
-
+              print("Verified !");
+              ClassFireStoreUserInfoStorage(
+                      firstName: _firstName.text,
+                      lastName: _lastName.text,
+                      phone: int.tryParse(_phone.text),
+                      email: _email.text,
+                      address1: _addressLine1.text,
+                      address2: _addressLine2.text,
+                      address3: _addressLine3.text)
+                  .storeIntoFireStore();
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 '/menu',
@@ -206,7 +216,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     return 0;
   }
 
-  /* void resetDisplay(BuildContext context) {
+  void resetDisplay(BuildContext context) {
     final errorUserId =
         Provider.of<ValueNotifier<userId_error>>(context, listen: false);
     errorUserId.value = userId_error.NONE;
@@ -226,7 +236,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     final errorPhone =
         Provider.of<ValueNotifier<phone_error>>(context, listen: false);
     errorPhone.value = phone_error.NONE;
-  } */
+  }
 
   void userIdErrorDisplay(BuildContext context) {
     final errorUserId =
@@ -539,8 +549,8 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            ctxBackup=context;
-                            
+                            ctxBackup = context;
+
                             submit(context);
                           },
                         ),
