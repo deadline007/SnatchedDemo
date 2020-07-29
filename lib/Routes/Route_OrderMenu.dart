@@ -3,15 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 
-
-
-
-class RouteMenu extends StatefulWidget {
-  @override
-  _RouteMenuState createState() => _RouteMenuState();
-}
-
-class _RouteMenuState extends State<RouteMenu> {
+class RouteOrderMenu {
   final double widthMin = ClassScreenConf.blockH;
 
   final double widthMax = ClassScreenConf.hArea;
@@ -24,14 +16,8 @@ class _RouteMenuState extends State<RouteMenu> {
 
   final Color colorDef = ClassAssetHolder.mainColor;
 
-
-
-  
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildOrderMenu(BuildContext context) {
     return Scaffold(
-      
       body: Container(
         width: ClassScreenConf.hArea,
         height: ClassScreenConf.hArea,

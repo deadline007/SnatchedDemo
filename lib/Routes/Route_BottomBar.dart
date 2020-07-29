@@ -11,7 +11,7 @@ enum currentPage {
   PROFILE,
 }
 
-class RouteBottomBar extends StatelessWidget {
+class RouteBottomBar {
   final double widthMin = ClassScreenConf.blockH;
 
   final double widthMax = ClassScreenConf.hArea;
@@ -40,45 +40,26 @@ class RouteBottomBar extends StatelessWidget {
     ),
   ];
 
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ValueNotifier<currentPage>>(
-      create: (_) => ValueNotifier<currentPage>(currentPage.MENU),
-      child: buildConsumer(),
-    );
-  }
-
-  Widget buildConsumer() {
+  Widget buildBottomBar(BuildContext context) {
     return Consumer<ValueNotifier<currentPage>>(
-      builder: (context, value, _) {
-        return Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-            items: bottomNavItems,
-            elevation: 5,
-            backgroundColor: Colors.white70,
-            iconSize: widthMin * 6,
-            unselectedItemColor: Colors.grey[600],
-            selectedItemColor: colorDef,
-            showUnselectedLabels: true,
-            currentIndex: value.value.index,
-            selectedFontSize: widthMin * 3,
-            unselectedFontSize: widthMin * 3,
-            type: BottomNavigationBarType.fixed,
-            onTap: (val) {
-              value.value = currentPage.values
-                  .where((element) => element.index == val)
-                  .elementAt(0);
-            },
-          ),
-          body: Consumer<ValueNotifier<currentPage>>(
-            builder: (context, value, _) {
-              switch (value.value) {
-                case currentPage.MENU:
-                  break;
-                default:
-              }
-            },
-          ),
+      builder: (__, value, _) {
+        return BottomNavigationBar(
+          items: bottomNavItems,
+          elevation: 5,
+          backgroundColor: Colors.white70,
+          iconSize: widthMin * 6,
+          unselectedItemColor: Colors.grey[600],
+          selectedItemColor: colorDef,
+          showUnselectedLabels: true,
+          currentIndex: value.value.index,
+          selectedFontSize: widthMin * 3,
+          unselectedFontSize: widthMin * 3,
+          type: BottomNavigationBarType.fixed,
+          onTap: (val) {
+            value.value = currentPage.values
+                .where((element) => element.index == val)
+                .elementAt(0);
+          },
         );
       },
     );
