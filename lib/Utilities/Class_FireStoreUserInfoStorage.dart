@@ -17,15 +17,17 @@ class ClassFireStoreUserInfoStorage {
 
   Future storeIntoFireStore() async {
     final userData = Firestore.instance.collection('userData');
+    final uid = await ClassFirebaseAuth.getCurrentUser();
     print("Storing into firebase...");
-    await userData.document(this.email).setData({
-      "First Name ": this.firstName,
-      "Last Name ": this.lastName,
-      "Address 1 ": this.address1,
-      "Address 2 ": this.address2,
-      "Address 3 ": this.address3,
-      "Phone ": this.phone,
-      "UID": await ClassFirebaseAuth.getCurrentUser(),
+    await userData.document(uid).setData({
+      "First Name": this.firstName,
+      "Last Name": this.lastName,
+      "Address 1": this.address1,
+      "Address 2": this.address2,
+      "Address 3": this.address3,
+      "Phone": this.phone,
+      "email": this.email,
+      "UID": uid,
     });
   }
 }
