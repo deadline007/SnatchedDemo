@@ -11,6 +11,7 @@ class RouteProfile {
   final double heightMax = ClassScreenConf.vArea;
   final String fontDef = ClassAssetHolder.proximaLight;
   final Color colorDef = ClassAssetHolder.mainColor;
+  String userImage = ClassAssetHolder.defUser;
   Color topColor = Colors.white;
 
   final TextStyle subElementStyle = TextStyle(
@@ -56,11 +57,27 @@ class RouteProfile {
                 height: heightMin * 18,
                 child: Center(
                   child: Container(
-                    width: widthMin * 36,
+                    constraints: BoxConstraints.tight(
+                      Size.fromRadius(
+                        widthMin * 18,
+                      ),
+                    ),
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient:
-                            RadialGradient(colors: [Colors.red, Colors.amber])),
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          Colors.red,
+                          Colors.amber,
+                        ],
+                      ),
+                    ),
+                    child: ClipOval(
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.asset(
+                        userImage,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
               ),
