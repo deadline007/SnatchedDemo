@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:snatched/Utilities/Class_FireStoreUserinfoRetrieve.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
+
+enum imageState {
+  DEFAULT,
+  LOADED,
+}
 
 class RouteProfile {
   final double widthMin = ClassScreenConf.blockH;
@@ -11,8 +18,12 @@ class RouteProfile {
   final double heightMax = ClassScreenConf.vArea;
   final String fontDef = ClassAssetHolder.proximaLight;
   final Color colorDef = ClassAssetHolder.mainColor;
+  final IconData editIcon = ClassAssetHolder.penIcon;
   String userImage = ClassAssetHolder.defUser;
   Color topColor = Colors.white;
+  File _image;
+
+  Future getImage() async {}
 
   final TextStyle subElementStyle = TextStyle(
       color: ClassAssetHolder.mainColor, fontSize: ClassScreenConf.blockV * 3);
@@ -55,27 +66,40 @@ class RouteProfile {
               child: Container(
                 width: widthMax,
                 height: heightMin * 18,
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints.tight(
-                      Size.fromRadius(
-                        widthMin * 18,
-                      ),
+                child: Container(
+                  constraints: BoxConstraints.tight(
+                    Size.fromRadius(
+                      widthMin * 18,
                     ),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: RadialGradient(
-                        colors: [
-                          Colors.red,
-                          Colors.amber,
-                        ],
-                      ),
+                  ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.asset(
+                      userImage,
+                      fit: BoxFit.contain,
                     ),
-                    child: ClipOval(
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.asset(
-                        userImage,
-                        fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: heightMin * 30,
+              right: 0,
+              child: Container(
+                width: widthMax,
+                height: heightMin * 16,
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Icon(
+                        editIcon,
+                        size: heightMin * 4,
                       ),
                     ),
                   ),

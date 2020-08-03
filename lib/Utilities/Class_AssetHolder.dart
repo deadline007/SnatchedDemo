@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:snatched/custom_icons_icons.dart';
+import 'package:snatched/pen_icon_icons.dart';
 
 class ClassAssetHolder {
   static final String logo = 'assets/images/logo.png';
@@ -12,4 +13,5 @@ class ClassAssetHolder {
   static final String proximaLight = 'ProximaLight';
   static Color mainColor = Color(0xFFFE0265);
   static final IconData rightIcon = CustomIcons.right;
+  static final IconData penIcon = PenIcon.pencil;
 }

@@ -45,3 +45,7 @@ flutter:
     - family:  CustomIcons
       fonts:
        - asset: assets/fonts/CustomIcons.ttf
+    
+    - family: PenIcon
+      fonts:
+      - asset: assets/fonts/PenIcon.ttf
