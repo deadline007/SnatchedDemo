@@ -78,6 +78,7 @@ class RouteProfile {
       alignment: Alignment.topLeft,
       children: <Widget>[
         topBoxBuilder(),
+        profileImageBuilder(),
         Positioned(
           top: heightMin * 30,
           right: 0,
@@ -123,6 +124,38 @@ class RouteProfile {
     );
   }
 
+  Widget profileImageBuilder() {
+    return Positioned(
+      top: heightMin * 30,
+      child: Container(
+        width: widthMax,
+        height: heightMin * 18,
+        child: Container(
+          constraints: BoxConstraints.tight(
+            Size.fromRadius(
+              widthMin * 18,
+            ),
+          ),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          child: ClipOval(
+            clipBehavior: Clip.antiAlias,
+            child: _image == null
+                ? Image.asset(
+                    userImage,
+                    fit: BoxFit.contain,
+                  )
+                : Image.asset(
+                    _image.path,
+                    fit: BoxFit.contain,
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Stack defaultProfile(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
@@ -130,30 +163,7 @@ class RouteProfile {
       alignment: Alignment.topLeft,
       children: <Widget>[
         topBoxBuilder(),
-        Positioned(
-          top: heightMin * 30,
-          child: Container(
-            width: widthMax,
-            height: heightMin * 18,
-            child: Container(
-              constraints: BoxConstraints.tight(
-                Size.fromRadius(
-                  widthMin * 18,
-                ),
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: ClipOval(
-                clipBehavior: Clip.antiAlias,
-                child: Image.asset(
-                  userImage,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        ),
+        profileImageBuilder(),
         Positioned(
           top: heightMin * 30,
           right: 0,

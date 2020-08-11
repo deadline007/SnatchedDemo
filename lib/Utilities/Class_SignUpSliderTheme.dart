@@ -22,7 +22,20 @@ class ClassSignUpSliderTheme extends SliderComponentShape {
       RenderBox parentBox,
       SliderThemeData sliderTheme,
       TextDirection textDirection,
+      Size sizeWithOverflow,
+      double textScaleFactor,
       double value}) {
+    assert(context != null);
+    assert(center != null);
+    assert(enableAnimation != null);
+    assert(sliderTheme != null);
+    assert(sliderTheme.disabledThumbColor != null);
+    assert(sliderTheme.thumbColor != null);
+
+    // This is the difference here:
+    // assert(!sizeWithOverflow.isEmpty);
+
+    sizeWithOverflow = parentBox.size;
     final Canvas canvas = context.canvas;
     final Paint paint = Paint()
       ..color = Color(0xFFFE0265)
