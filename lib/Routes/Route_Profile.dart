@@ -6,12 +6,19 @@ import 'package:provider/provider.dart';
 
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
-import 'package:snatched/Utilities/Class_primaryColorGen.dart';
+import 'package:snatched/Utilities/Raw_ColorForTop.dart';
 import 'package:snatched/Utilities/Class_FireStoreImageUpload.dart';
+import 'package:snatched/Utilities/Class_FireStoreImageRetrieve.dart';
+import 'package:snatched/Utilities/Class_LocalProfileImageStorage.dart';
 
 enum editState {
   NONE,
   EDITING,
+}
+
+enum profileImageState {
+  DEFAULT,
+  EDITED,
 }
 
 class RouteProfile {
@@ -23,8 +30,12 @@ class RouteProfile {
   final Color colorDef = ClassAssetHolder.mainColor;
   final IconData editIcon = ClassAssetHolder.penIcon;
   String userImage = ClassAssetHolder.defUser;
-  Color topColor = Colors.grey[400];
+  Color topColor;
+  final double imageRadius = ClassScreenConf.blockH * 18;
   PickedFile _image;
+
+  RouteProfile(String imagePath, this.topColor)
+      : _image = PickedFile(imagePath);
 
   String _uploadImageURL;
 
@@ -42,10 +53,10 @@ class RouteProfile {
     fontSize: ClassScreenConf.blockV * 3,
   );
 
-  Future<Widget> imagePicker(BuildContext context) async {
+  Future<Widget> imagePicker(BuildContext ogcontext) async {
     return showDialog(
       useSafeArea: true,
-      context: context,
+      context: ogcontext,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
@@ -72,12 +83,22 @@ class RouteProfile {
                             ),
                             onPressed: () async => ImagePicker()
                                 .getImage(
-                              source: ImageSource.gallery,
-                            )
+                                    source: ImageSource.gallery,
+                                    imageQuality: 90,
+                                    maxHeight: imageRadius,
+                                    maxWidth: imageRadius)
                                 .then(
                               (value) {
+                                final path = Provider.of<ValueNotifier<String>>(
+                                    ogcontext,
+                                    listen: false);
+                                path.value = value.path;
                                 _image = value;
+                                print("Profile Image set");
+
                                 stateSetter(() {});
+
+                                Navigator.of(context).pop();
                               },
                             ),
                           ),
@@ -102,11 +123,22 @@ class RouteProfile {
                             onPressed: () async => ImagePicker()
                                 .getImage(
                               source: ImageSource.camera,
+                              preferredCameraDevice: CameraDevice.front,
+                              maxWidth: imageRadius,
+                              maxHeight: imageRadius,
+                              imageQuality: 90,
                             )
                                 .then(
                               (value) {
+                                final path = Provider.of<ValueNotifier<String>>(
+                                    ogcontext,
+                                    listen: false);
+                                path.value = value.path;
                                 _image = value;
+                                print("Profile Image set");
                                 stateSetter(() {});
+
+                                Navigator.of(context).pop();
                               },
                             ),
                           ),
@@ -126,6 +158,11 @@ class RouteProfile {
     );
   }
 
+  Future storeImage() async {
+    await ClassLocalProfileImageStorage()
+        .storeImage(await _image.readAsBytes());
+  }
+
   Future uploadImage() async {
     _uploadImageURL = await FireStoreImageUpload().uploadImage(
       await _image.readAsBytes(),
@@ -133,21 +170,20 @@ class RouteProfile {
     print(_uploadImageURL);
   }
 
-  Future<void> colorForTop(PickedFile currentImage) async {
-    final ClassPrimaryColorGen primGen = ClassPrimaryColorGen();
-    final Color color =
-        await primGen.colorGenny(await currentImage.readAsBytes());
-    topColor = color;
-    await uploadImage();
-  }
-
   Widget buildProfile(BuildContext context) {
     return Scaffold(
       body: Container(
         width: widthMax,
         height: heightMax,
-        child: ChangeNotifierProvider<ValueNotifier<editState>>(
-          create: (_) => ValueNotifier<editState>(editState.NONE),
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<ValueNotifier<editState>>(
+              create: (_) => ValueNotifier<editState>(editState.NONE),
+            ),
+            ChangeNotifierProvider<ValueNotifier<String>>(
+              create: (_) => ValueNotifier<String>(_image.path),
+            ),
+          ],
           child: Builder(
             builder: (context) => profileState(
               context,
@@ -177,19 +213,25 @@ class RouteProfile {
       alignment: Alignment.topLeft,
       children: <Widget>[
         topBoxBuilder(),
-        GestureDetector(
-          onTap: () async {
-            Future.value(
-              imagePicker(
-                context,
-              ),
-            ).then(
-              (_) => colorForTop(
-                _image,
-              ),
-            );
-          },
-          child: profileImageBuilder(),
+        Positioned(
+          top: heightMin * 30,
+          child: GestureDetector(
+            onTap: () async {
+              await Future.value(
+                imagePicker(
+                  context,
+                ),
+              ).then((_) async {
+                topColor = await colorForTop(
+                  _image.path,
+                );
+              }).then((_) async {
+                await uploadImage();
+                await storeImage();
+              });
+            },
+            child: profileImageBuilder(context),
+          ),
         ),
         Positioned(
           top: heightMin * 30,
@@ -236,37 +278,88 @@ class RouteProfile {
     );
   }
 
-  Widget profileImageBuilder() {
-    return Positioned(
-      top: heightMin * 30,
+  Widget profileImageBuilder(BuildContext context) {
+    return Container(
+      width: widthMax,
+      height: heightMin * 18,
       child: Container(
-        width: widthMax,
-        height: heightMin * 18,
-        child: Container(
-          constraints: BoxConstraints.tight(
-            Size.fromRadius(
-              widthMin * 18,
-            ),
+        constraints: BoxConstraints.tight(
+          Size.fromRadius(
+            imageRadius,
           ),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-          ),
-          child: ClipOval(
-            clipBehavior: Clip.antiAlias,
-            child: _image == null
-                ? Image.asset(
-                    userImage,
-                    fit: BoxFit.contain,
-                  )
-                : Image.asset(
-                    _image.path,
+        ),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+        ),
+        child: Consumer<ValueNotifier<String>>(
+          builder: (context, value, _) {
+            return ClipOval(
+              clipBehavior: Clip.antiAlias,
+              child: Image.asset(
+                value.value,
+                errorBuilder: (context, _, __) {
+                  return imageError(context);
+                },
+                fit: BoxFit.contain,
+                scale: widthMin * 10,
+                width: 10,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget imageError(BuildContext ogcontext) {
+    print("Image Loading Error !");
+    return FutureBuilder(
+      future: ClassFireStoreImageRetrieve().imageStatus(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data) {
+            return FutureBuilder(
+              future: ClassFireStoreImageRetrieve().getImage(),
+              builder: (_, snapshot2) {
+                if (snapshot2.connectionState == ConnectionState.done) {
+                  _image = PickedFile(snapshot2.data);
+                  final imageState = Provider.of<ValueNotifier<String>>(
+                      ogcontext,
+                      listen: false);
+                  Future.value(storeImage())
+                      .then(
+                        (_) => Future.value(
+                          ClassLocalProfileImageStorage().localFile,
+                        ),
+                      )
+                      .then((value) => imageState.value = value.path);
+
+                  return Image.asset(
+                    imageState.value,
                     fit: BoxFit.contain,
                     scale: widthMin * 10,
                     width: 10,
-                  ),
-          ),
-        ),
-      ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            );
+          } else {
+            final imageState =
+                Provider.of<ValueNotifier<String>>(ogcontext, listen: false);
+            imageState.value = userImage;
+            return Image.asset(
+              imageState.value,
+              fit: BoxFit.contain,
+              scale: widthMin * 10,
+              width: 10,
+            );
+          }
+        } else {
+          return Container();
+        }
+      },
     );
   }
 
@@ -277,7 +370,10 @@ class RouteProfile {
       alignment: Alignment.topLeft,
       children: <Widget>[
         topBoxBuilder(),
-        profileImageBuilder(),
+        Positioned(
+          top: heightMin * 30,
+          child: profileImageBuilder(context),
+        ),
         Positioned(
           top: heightMin * 30,
           right: 0,

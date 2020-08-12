@@ -5,19 +5,28 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:snatched/Utilities/Class_FireBaseAuth.dart';
 
 class FireStoreImageUpload {
-  final StorageReference storageReference = FirebaseStorage.instance
-      .ref()
-      .child('userData/profileImages/${ClassFirebaseAuth.getCurrentUser()}');
-  String fileURL;
+  Future<StorageReference> imageReference() async {
+    final StorageReference storageReference = FirebaseStorage.instance.ref().child(
+        'userData/profileImages/${await ClassFirebaseAuth.getCurrentUser()}/ProfileImage.jpeg');
+    return storageReference;
+  }
 
-  Future<String> uploadImage(Uint8List image) async {
-    StorageUploadTask uploadTask = storageReference.putData(image);
-    await uploadTask.onComplete;
-    print("User Image uploaded");
+  Future<String> uploadImage(Uint8List imageData) async {
+    String fileURL;
+    StorageReference storageReference = await imageReference();
+    StorageUploadTask uploadTask = storageReference.putData(imageData);
+    await uploadTask.onComplete.whenComplete(() async {
+      print("User Image uploaded");
+      fileURL = await getURL(storageReference);
+    });
 
-    await storageReference
-        .getDownloadURL()
-        .then((value) => this.fileURL = value);
     return fileURL;
+  }
+  
+
+  Future<String> getURL(StorageReference storageReference) async {
+    String url;
+    url = await storageReference.getDownloadURL();
+    return url;
   }
 }

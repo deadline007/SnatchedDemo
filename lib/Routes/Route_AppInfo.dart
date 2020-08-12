@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
+import 'package:snatched/Utilities/Class_PermissionManager.dart';
 
 class RouteAppInfo extends StatelessWidget {
   final double widthMin = ClassScreenConf.blockH;
@@ -81,14 +82,18 @@ class RouteAppInfo extends StatelessWidget {
                       color: Colors.white,
                       size: widthMin * 10,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (counter.value < imageList.length - 1) {
                         changeCounter("add");
                       } else {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          '/authSignIn',
-                          (_) => false,
+                        await Future.value(
+                                ClassPermissionManager().askForPerms())
+                            .then(
+                          (_) => Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/authSignIn',
+                            (_) => false,
+                          ),
                         );
                       }
                     },

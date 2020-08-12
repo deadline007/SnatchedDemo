@@ -7,7 +7,6 @@ import 'package:snatched/Utilities/Class_AssetHolder.dart';
 enum currentPage {
   MENU,
   ORDERS,
-  CART,
   PROFILE,
 }
 
@@ -23,20 +22,16 @@ class RouteBottomBar {
   final Color colorDef = ClassAssetHolder.mainColor;
   final List<BottomNavigationBarItem> bottomNavItems = [
     BottomNavigationBarItem(
-      icon: Icon(Icons.fastfood),
+      icon: Icon(Icons.account_circle),
+      title: Text("Profile"),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.restaurant_menu),
       title: Text("Menu"),
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.history),
+      icon: Icon(Icons.restore),
       title: Text("Orders"),
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.shopping_cart),
-      title: Text("Cart"),
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.supervised_user_circle),
-      title: Text("Profile"),
     ),
   ];
 
