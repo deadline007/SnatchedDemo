@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:snatched/Utilities/Class_FireStoreUserinfoRetrieve.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:snatched/Utilities/Class_FireStoreUserinfoRetrieve.dart';
+
 import 'package:provider/provider.dart';
-import 'package:path/path.dart' as Path;
 
 import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
+import 'package:snatched/Utilities/Class_primaryColorGen.dart';
+import 'package:snatched/Utilities/Class_FireStoreImageUpload.dart';
 
 enum editState {
   NONE,
@@ -22,11 +23,10 @@ class RouteProfile {
   final Color colorDef = ClassAssetHolder.mainColor;
   final IconData editIcon = ClassAssetHolder.penIcon;
   String userImage = ClassAssetHolder.defUser;
-  Color topColor = Colors.white;
-  File _image;
-  String _uploadImageURL;
+  Color topColor = Colors.grey[400];
+  PickedFile _image;
 
-  Future getImage(String option) async {}
+  String _uploadImageURL;
 
   final TextStyle subElementStyle = TextStyle(
       color: ClassAssetHolder.mainColor, fontSize: ClassScreenConf.blockV * 3);
@@ -41,6 +41,105 @@ class RouteProfile {
     color: Colors.grey[800],
     fontSize: ClassScreenConf.blockV * 3,
   );
+
+  Future<Widget> imagePicker(BuildContext context) async {
+    return showDialog(
+      useSafeArea: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              "Select image location",
+            ),
+          ),
+          content: StatefulBuilder(
+            builder: (context, StateSetter stateSetter) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          enableFeedback: true,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.filter,
+                            ),
+                            onPressed: () async => ImagePicker()
+                                .getImage(
+                              source: ImageSource.gallery,
+                            )
+                                .then(
+                              (value) {
+                                _image = value;
+                                stateSetter(() {});
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "Gallery",
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          enableFeedback: true,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.camera,
+                            ),
+                            onPressed: () async => ImagePicker()
+                                .getImage(
+                              source: ImageSource.camera,
+                            )
+                                .then(
+                              (value) {
+                                _image = value;
+                                stateSetter(() {});
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "Camera",
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future uploadImage() async {
+    _uploadImageURL = await FireStoreImageUpload().uploadImage(
+      await _image.readAsBytes(),
+    );
+    print(_uploadImageURL);
+  }
+
+  Future<void> colorForTop(PickedFile currentImage) async {
+    final ClassPrimaryColorGen primGen = ClassPrimaryColorGen();
+    final Color color =
+        await primGen.colorGenny(await currentImage.readAsBytes());
+    topColor = color;
+    await uploadImage();
+  }
 
   Widget buildProfile(BuildContext context) {
     return Scaffold(
@@ -78,7 +177,20 @@ class RouteProfile {
       alignment: Alignment.topLeft,
       children: <Widget>[
         topBoxBuilder(),
-        profileImageBuilder(),
+        GestureDetector(
+          onTap: () async {
+            Future.value(
+              imagePicker(
+                context,
+              ),
+            ).then(
+              (_) => colorForTop(
+                _image,
+              ),
+            );
+          },
+          child: profileImageBuilder(),
+        ),
         Positioned(
           top: heightMin * 30,
           right: 0,
@@ -118,7 +230,7 @@ class RouteProfile {
         width: widthMax * 2,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.grey,
+          color: topColor,
         ),
       ),
     );
@@ -149,6 +261,8 @@ class RouteProfile {
                 : Image.asset(
                     _image.path,
                     fit: BoxFit.contain,
+                    scale: widthMin * 10,
+                    width: 10,
                   ),
           ),
         ),
