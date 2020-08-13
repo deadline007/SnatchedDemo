@@ -20,7 +20,8 @@ class RouteOrderMenu {
     return Scaffold(
       body: Container(
         width: ClassScreenConf.hArea,
-        height: ClassScreenConf.hArea,
+        height: ClassScreenConf.vArea,
+        color: Colors.blue,
         child: Stack(
           children: <Widget>[
             Positioned(

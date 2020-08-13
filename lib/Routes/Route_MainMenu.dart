@@ -33,6 +33,7 @@ class RouteMainMenu extends StatelessWidget {
 
   Widget buildConsumer(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: RouteBottomBar().buildBottomBar(context),
       body: Consumer<ValueNotifier<currentPage>>(
         builder: (context, value, _) {
@@ -41,10 +42,8 @@ class RouteMainMenu extends StatelessWidget {
               print("Opening OrderMenu");
               return RouteOrderMenu().buildOrderMenu(context);
               break;
-            /*  case currentPage.CART:
-              break;
+            /* 
             case currentPage.ORDERS:
-              break;
               break;
               */
             case currentPage.PROFILE:

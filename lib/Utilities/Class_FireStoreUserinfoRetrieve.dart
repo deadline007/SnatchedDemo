@@ -11,11 +11,14 @@ class ClassFireStoreUserinfoRetrieve {
     return "${await currentUser.data["First Name"]} ${await currentUser.data["Last Name"]} ";
   }
 
-  Future<String> retrieveAddress() async {
+  Future<Map<int,String>> retrieveAddress() async {
     final userId = await ClassFirebaseAuth.getCurrentUser();
     final DocumentSnapshot currentUser = await userData.document(userId).get();
-
-    return "${await currentUser.data["Address 1"]}\n${await currentUser.data["Address 2"]}\n${await currentUser.data["Address 3"]}";
+    final String address1=await currentUser.data["Address 1"];
+    final String address2=await currentUser.data["Address 2"];
+    final String address3=await currentUser.data["Address 3"];
+    final Map<int,String> map={1:address1,2:address2,3:address3};
+    return map;
   }
 
   Future<String> retrievePhone() async {

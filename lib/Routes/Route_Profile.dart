@@ -21,6 +21,20 @@ enum profileImageState {
   EDITED,
 }
 
+enum profileNameState {
+  DEFAULT,
+  EDITING,
+}
+
+enum profileAddressState {
+  DEFAULT,
+  EDITING,
+}
+enum profilePhoneState {
+  DEFAULT,
+  EDITING,
+}
+
 class RouteProfile {
   final double widthMin = ClassScreenConf.blockH;
   final double widthMax = ClassScreenConf.hArea;
@@ -29,10 +43,21 @@ class RouteProfile {
   final String fontDef = ClassAssetHolder.proximaLight;
   final Color colorDef = ClassAssetHolder.mainColor;
   final IconData editIcon = ClassAssetHolder.penIcon;
-  String userImage = ClassAssetHolder.defUser;
+  final String defaultImage = ClassAssetHolder.defUser;
   Color topColor;
   final double imageRadius = ClassScreenConf.blockH * 18;
   PickedFile _image;
+  TextEditingController nameEditor = TextEditingController();
+  TextEditingController phoneEditor = TextEditingController();
+  TextEditingController address1Editor = TextEditingController();
+  TextEditingController address2Editor = TextEditingController();
+  TextEditingController address3Editor = TextEditingController();
+  TextStyle nameStyle = TextStyle(
+    fontFamily: ClassAssetHolder.proximaLight,
+    fontWeight: FontWeight.w900,
+    color: ClassAssetHolder.mainColor,
+    fontSize: ClassScreenConf.blockV * 4.6,
+  );
 
   RouteProfile(String imagePath, this.topColor)
       : _image = PickedFile(imagePath);
@@ -84,7 +109,6 @@ class RouteProfile {
                             onPressed: () async => ImagePicker()
                                 .getImage(
                                     source: ImageSource.gallery,
-                                    imageQuality: 90,
                                     maxHeight: imageRadius,
                                     maxWidth: imageRadius)
                                 .then(
@@ -183,6 +207,18 @@ class RouteProfile {
             ChangeNotifierProvider<ValueNotifier<String>>(
               create: (_) => ValueNotifier<String>(_image.path),
             ),
+            ChangeNotifierProvider<ValueNotifier<profileNameState>>(
+              create: (_) =>
+                  ValueNotifier<profileNameState>(profileNameState.DEFAULT),
+            ),
+            ChangeNotifierProvider<ValueNotifier<profileAddressState>>(
+              create: (_) => ValueNotifier<profileAddressState>(
+                  profileAddressState.DEFAULT),
+            ),
+            ChangeNotifierProvider<ValueNotifier<profilePhoneState>>(
+              create: (_) =>
+                  ValueNotifier<profilePhoneState>(profilePhoneState.DEFAULT),
+            ),
           ],
           child: Builder(
             builder: (context) => profileState(
@@ -259,107 +295,65 @@ class RouteProfile {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget topBoxBuilder() {
-    return Positioned(
-      top: -heightMin * 30,
-      left: -widthMin * 50,
-      child: Container(
-        height: heightMin * 70,
-        width: widthMax * 2,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: topColor,
-        ),
-      ),
-    );
-  }
-
-  Widget profileImageBuilder(BuildContext context) {
-    return Container(
-      width: widthMax,
-      height: heightMin * 18,
-      child: Container(
-        constraints: BoxConstraints.tight(
-          Size.fromRadius(
-            imageRadius,
+        Positioned(
+          top: heightMin * 50,
+          left: 0,
+          child: GestureDetector(
+            child: Consumer<ValueNotifier<profileNameState>>(
+                builder: (__, value, _) {
+              if (value.value == profileNameState.DEFAULT) {
+                return nameBuilder();
+              } else {
+                return nameEditorBuilder();
+              }
+            }),
+            onTap: () {
+              final provider = Provider.of<ValueNotifier<profileNameState>>(
+                  context,
+                  listen: false);
+              provider.value = profileNameState.EDITING;
+            },
           ),
         ),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
+        Positioned(
+          top: heightMin * 60,
+          child: GestureDetector(
+            child: Consumer<ValueNotifier<profileAddressState>>(
+                builder: (__, value, _) {
+              if (value.value == profileAddressState.DEFAULT) {
+                return addressBuilder();
+              } else {
+                return addressBuilder();
+              }
+            }),
+            onTap: () {
+              final provider = Provider.of<ValueNotifier<profileAddressState>>(
+                  context,
+                  listen: false);
+              provider.value = profileAddressState.EDITING;
+            },
+          ),
         ),
-        child: Consumer<ValueNotifier<String>>(
-          builder: (context, value, _) {
-            return ClipOval(
-              clipBehavior: Clip.antiAlias,
-              child: Image.asset(
-                value.value,
-                errorBuilder: (context, _, __) {
-                  return imageError(context);
-                },
-                fit: BoxFit.contain,
-                scale: widthMin * 10,
-                width: 10,
-              ),
-            );
-          },
+        Positioned(
+          top: heightMin * 77,
+          child: GestureDetector(
+            child: Consumer<ValueNotifier<profilePhoneState>>(
+                builder: (__, value, _) {
+              if (value.value == profilePhoneState.DEFAULT) {
+                return phoneBuilder();
+              } else {
+                return phoneBuilder();
+              }
+            }),
+            onTap: () {
+              final provider = Provider.of<ValueNotifier<profilePhoneState>>(
+                  context,
+                  listen: false);
+              provider.value = profilePhoneState.EDITING;
+            },
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget imageError(BuildContext ogcontext) {
-    print("Image Loading Error !");
-    return FutureBuilder(
-      future: ClassFireStoreImageRetrieve().imageStatus(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data) {
-            return FutureBuilder(
-              future: ClassFireStoreImageRetrieve().getImage(),
-              builder: (_, snapshot2) {
-                if (snapshot2.connectionState == ConnectionState.done) {
-                  _image = PickedFile(snapshot2.data);
-                  final imageState = Provider.of<ValueNotifier<String>>(
-                      ogcontext,
-                      listen: false);
-                  Future.value(storeImage())
-                      .then(
-                        (_) => Future.value(
-                          ClassLocalProfileImageStorage().localFile,
-                        ),
-                      )
-                      .then((value) => imageState.value = value.path);
-
-                  return Image.asset(
-                    imageState.value,
-                    fit: BoxFit.contain,
-                    scale: widthMin * 10,
-                    width: 10,
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            );
-          } else {
-            final imageState =
-                Provider.of<ValueNotifier<String>>(ogcontext, listen: false);
-            imageState.value = userImage;
-            return Image.asset(
-              imageState.value,
-              fit: BoxFit.contain,
-              scale: widthMin * 10,
-              width: 10,
-            );
-          }
-        } else {
-          return Container();
-        }
-      },
+      ],
     );
   }
 
@@ -403,111 +397,268 @@ class RouteProfile {
         Positioned(
           top: heightMin * 50,
           left: 0,
-          child: Container(
-            width: widthMax,
-            height: heightMin * 5,
-            child: Center(
-              child: Container(
-                child: FutureBuilder(
-                  future: ClassFireStoreUserinfoRetrieve().retrieveName(),
-                  builder: (_, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.none ||
-                        snapshot.connectionState == ConnectionState.waiting) {
-                      return Text("");
-                    } else {
-                      return Text(
-                        snapshot.data,
-                        style: TextStyle(
-                          fontFamily: fontDef,
-                          fontWeight: FontWeight.w900,
-                          color: colorDef,
-                          fontSize: heightMin * 4.6,
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-          ),
+          child: nameBuilder(),
         ),
         Positioned(
           top: heightMin * 60,
-          child: Container(
-            width: widthMax,
-            height: heightMin * 18,
-            child: Padding(
-              padding: subElementPadding,
-              child: Stack(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Address",
-                      style: subElementStyle,
-                    ),
-                  ),
-                  Positioned(
-                    top: heightMin * 5,
-                    child: FutureBuilder(
-                      future:
-                          ClassFireStoreUserinfoRetrieve().retrieveAddress(),
-                      builder: (_, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none ||
-                            snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                          return Text("");
-                        } else {
-                          return Text(
-                            snapshot.data,
-                            style: userDataStyle,
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: addressBuilder(),
         ),
         Positioned(
           top: heightMin * 77,
-          child: Container(
-            width: widthMax,
-            height: heightMin * 12,
-            child: Padding(
-              padding: subElementPadding,
-              child: Stack(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Phone", style: subElementStyle),
-                  ),
-                  Positioned(
-                    top: heightMin * 5,
-                    child: FutureBuilder(
-                      future: ClassFireStoreUserinfoRetrieve().retrievePhone(),
-                      builder: (_, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none ||
-                            snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                          return Text("");
-                        } else {
-                          return Text(
-                            snapshot.data,
-                            style: userDataStyle,
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: phoneBuilder(),
         ),
       ],
+    );
+  }
+
+  Widget topBoxBuilder() {
+    return Positioned(
+      top: -heightMin * 30,
+      left: -widthMin * 50,
+      child: Container(
+        height: heightMin * 70,
+        width: widthMax * 2,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: topColor,
+        ),
+      ),
+    );
+  }
+
+  Widget profileImageBuilder(BuildContext context) {
+    return Container(
+      width: widthMax,
+      height: heightMin * 18,
+      child: Center(
+        child: Container(
+          width: imageRadius,
+          constraints: BoxConstraints.tight(
+            Size.fromRadius(
+              imageRadius,
+            ),
+          ),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          child: Consumer<ValueNotifier<String>>(
+            builder: (context, value, _) {
+              return imageBuilderResult(value);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container imageBuilderResult(ValueNotifier<String> value) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          fit: BoxFit.fill,
+          onError: (
+            context,
+            _,
+          ) {
+            return imageError(context);
+          },
+          image: AssetImage(
+            value.value,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget imageError(BuildContext ogcontext) {
+    print("Image Loading Error !");
+    return FutureBuilder(
+      future: ClassFireStoreImageRetrieve().imageStatus(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data) {
+            return FutureBuilder(
+              future: ClassFireStoreImageRetrieve().getImage(),
+              builder: (_, snapshot2) {
+                if (snapshot2.connectionState == ConnectionState.done) {
+                  _image = PickedFile(snapshot2.data);
+                  final imageState = Provider.of<ValueNotifier<String>>(
+                      ogcontext,
+                      listen: false);
+                  Future.value(storeImage())
+                      .then(
+                        (_) => Future.value(
+                          ClassLocalProfileImageStorage().localFile,
+                        ),
+                      )
+                      .then((value) => imageState.value = value.path);
+
+                  return imageBuilderResult(imageState);
+                } else {
+                  return Container();
+                }
+              },
+            );
+          } else {
+            final imageState =
+                Provider.of<ValueNotifier<String>>(ogcontext, listen: false);
+            imageState.value = defaultImage;
+            return imageBuilderResult(imageState);
+          }
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  Widget nameBuilder() {
+    return Container(
+      width: widthMax,
+      height: heightMin * 5,
+      child: Center(
+        child: Container(
+          child: FutureBuilder(
+            future: ClassFireStoreUserinfoRetrieve().retrieveName(),
+            builder: (_, snapshot) {
+              if (snapshot.connectionState == ConnectionState.none ||
+                  snapshot.connectionState == ConnectionState.waiting) {
+                return Text("");
+              } else {
+                nameEditor.text = snapshot.data;
+                return Text(
+                  snapshot.data,
+                  style: nameStyle,
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget nameEditorBuilder() {
+    double width = widthCalculator(nameEditor.text);
+    return Container(
+      width: widthMax,
+      height: heightMin * 5,
+      child: Center(
+        child: Container(
+          child: StatefulBuilder(builder: (context, StateSetter statesetter) {
+            return AnimatedContainer(
+              duration: Duration(milliseconds: 10),
+              width: width,
+              child: TextField(
+                controller: nameEditor,
+                onChanged: (string) {
+                  width = widthCalculator(string);
+                  statesetter(() {});
+                },
+                style: nameStyle,
+                maxLines: 1,
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+ 
+
+  double widthCalculator(String string) {
+    if (string.length > 5) {
+      double width;
+      TextSpan textSpan = TextSpan(text: nameEditor.text, style: nameStyle);
+      TextPainter textPainter = TextPainter(
+          text: textSpan,
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center);
+      textPainter.layout(maxWidth: widthMax);
+      width = textPainter.width * 1.05;
+      return width;
+    } else {
+      return widthMin * 20;
+    }
+  }
+
+  Container phoneBuilder() {
+    return Container(
+      width: widthMax,
+      height: heightMin * 12,
+      child: Padding(
+        padding: subElementPadding,
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text("Phone", style: subElementStyle),
+            ),
+            Positioned(
+              top: heightMin * 5,
+              child: FutureBuilder(
+                future: ClassFireStoreUserinfoRetrieve().retrievePhone(),
+                builder: (_, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.none ||
+                      snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("");
+                  } else {
+                    phoneEditor.text = snapshot.data;
+                    return Text(
+                      snapshot.data,
+                      style: userDataStyle,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container addressBuilder() {
+    return Container(
+      width: widthMax,
+      height: heightMin * 18,
+      child: Padding(
+        padding: subElementPadding,
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Address",
+                style: subElementStyle,
+              ),
+            ),
+            Positioned(
+              top: heightMin * 5,
+              child: FutureBuilder(
+                future: ClassFireStoreUserinfoRetrieve().retrieveAddress(),
+                builder: (_, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.none ||
+                      snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("");
+                  } else {
+                    Map<int, String> map = snapshot.data;
+                    address1Editor.text = map[1];
+                    address2Editor.text = map[2];
+                    address3Editor.text = map[3];
+                    return Text(
+                      "${map[1]}\n${map[2]}\n${map[3]}\n",
+                      style: userDataStyle,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

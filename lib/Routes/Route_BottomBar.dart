@@ -5,9 +5,9 @@ import 'package:snatched/Utilities/Class_ScreenConf.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 
 enum currentPage {
+  PROFILE,
   MENU,
   ORDERS,
-  PROFILE,
 }
 
 class RouteBottomBar {
@@ -40,20 +40,26 @@ class RouteBottomBar {
       builder: (__, value, _) {
         return BottomNavigationBar(
           items: bottomNavItems,
-          elevation: 5,
-          backgroundColor: Colors.white70,
-          iconSize: widthMin * 6,
-          unselectedItemColor: Colors.grey[600],
+          elevation: 20,
+          
+          backgroundColor: Colors.white,
+          iconSize: widthMin * 8,
+          unselectedItemColor: Colors.grey[800],
+          
           selectedItemColor: colorDef,
-          showUnselectedLabels: true,
+          showUnselectedLabels: false,
+          showSelectedLabels: false,
           currentIndex: value.value.index,
-          selectedFontSize: widthMin * 3,
-          unselectedFontSize: widthMin * 3,
+          selectedFontSize: widthMin * 3.2,
+          unselectedFontSize: widthMin * 3.2,
           type: BottomNavigationBarType.fixed,
           onTap: (val) {
+            print(currentPage.values
+                .where((element) => element.index == val)
+                .first);
             value.value = currentPage.values
                 .where((element) => element.index == val)
-                .elementAt(0);
+                .first;
           },
         );
       },
