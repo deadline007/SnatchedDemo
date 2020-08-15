@@ -15,9 +15,17 @@ class ClassFireStoreUserInfoStorage {
     @required this.email,
   });
 
-  Future storeIntoFireStore() async {
+  static Future<Map<CollectionReference, String>> get getDetails async {
     final userData = Firestore.instance.collection('userData');
     final uid = await ClassFirebaseAuth.getCurrentUser();
+    Map<CollectionReference, String> map = {userData: uid};
+    return map;
+  }
+
+  Future storeIntoFireStore() async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
     print("Storing into firebase...");
     await userData.document(uid).setData({
       "First Name": this.firstName,
@@ -30,4 +38,28 @@ class ClassFireStoreUserInfoStorage {
       "UID": uid,
     });
   }
+
+  static Future storeName(String name) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    List<String> nameSplit = name.split(" ");
+    String firstName = nameSplit[0];
+    String lastName = "";
+    if (nameSplit.length > 1) {
+      lastName = nameSplit[1];
+    }
+    print("Storing name");
+    await userData.document(uid).setData({
+      "First Name": firstName,
+      "Last Name": lastName,
+    });
+  }
+  
+  static Future storeAddress(Map<int,String> map) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+  }
+
 }

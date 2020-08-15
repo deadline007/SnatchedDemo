@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:snatched/Utilities/Class_FireStoreUserinfoRetrieve.dart';
+import 'dart:io';
 
 import 'package:provider/provider.dart';
 
@@ -10,6 +10,9 @@ import 'package:snatched/Utilities/Raw_ColorForTop.dart';
 import 'package:snatched/Utilities/Class_FireStoreImageUpload.dart';
 import 'package:snatched/Utilities/Class_FireStoreImageRetrieve.dart';
 import 'package:snatched/Utilities/Class_LocalProfileImageStorage.dart';
+
+import 'package:snatched/Utilities/Class_FireStoreUserinfoStorage.dart';
+import 'package:snatched/Utilities/Class_FireStoreUserinfoRetrieve.dart';
 
 enum editState {
   NONE,
@@ -58,6 +61,11 @@ class RouteProfile {
     color: ClassAssetHolder.mainColor,
     fontSize: ClassScreenConf.blockV * 4.6,
   );
+  String name;
+  String phone;
+  String address1;
+  String address2;
+  String address3;
 
   RouteProfile(String imagePath, this.topColor)
       : _image = PickedFile(imagePath);
@@ -194,6 +202,18 @@ class RouteProfile {
     print(_uploadImageURL);
   }
 
+  Future imageErrorResult(PickedFile imageData, BuildContext context) async {
+    _image = imageData;
+    await storeImage();
+    File imageFile = await ClassLocalProfileImageStorage().localFile;
+    final imageState =
+        Provider.of<ValueNotifier<String>>(context, listen: false);
+    imageState.value = imageFile.path;
+    print("New Image Set !");
+    
+    return imageState;
+  }
+
   Widget buildProfile(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -280,10 +300,14 @@ class RouteProfile {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     final currentState = Provider.of<ValueNotifier<editState>>(
                         context,
                         listen: false);
+                    if (nameEditor.text != name) {
+                      await ClassFireStoreUserInfoStorage.storeName(
+                          nameEditor.text);
+                    }
                     currentState.value = editState.NONE;
                   },
                   child: Icon(
@@ -443,7 +467,9 @@ class RouteProfile {
           ),
           child: Consumer<ValueNotifier<String>>(
             builder: (context, value, _) {
-              return imageBuilderResult(value);
+              return Container(
+                child: imageBuilderResult(value, context),
+              );
             },
           ),
         ),
@@ -451,24 +477,39 @@ class RouteProfile {
     );
   }
 
-  Container imageBuilderResult(ValueNotifier<String> value) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          fit: BoxFit.fill,
-          onError: (
-            context,
-            _,
-          ) {
-            return imageError(context);
-          },
-          image: AssetImage(
-            value.value,
+  Container imageBuilderResult(
+      ValueNotifier<String> value, BuildContext context) {
+    try {
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            onError: (
+              __,
+              _,
+            ) {
+              return imageError(context);
+            },
+            image: AssetImage(
+              value.value,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } on Exception {
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: AssetImage(
+              defaultImage,
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget imageError(BuildContext ogcontext) {
@@ -482,19 +523,20 @@ class RouteProfile {
               future: ClassFireStoreImageRetrieve().getImage(),
               builder: (_, snapshot2) {
                 if (snapshot2.connectionState == ConnectionState.done) {
-                  _image = PickedFile(snapshot2.data);
-                  final imageState = Provider.of<ValueNotifier<String>>(
-                      ogcontext,
-                      listen: false);
-                  Future.value(storeImage())
-                      .then(
-                        (_) => Future.value(
-                          ClassLocalProfileImageStorage().localFile,
-                        ),
-                      )
-                      .then((value) => imageState.value = value.path);
-
-                  return imageBuilderResult(imageState);
+                  return FutureBuilder(
+                    future:
+                        imageErrorResult(PickedFile(snapshot2.data), ogcontext),
+                    builder: (_, snapshot3) {
+                      if (snapshot3.connectionState == ConnectionState.done) {
+                        print("Image error complete");
+                        return Container(
+                          child: imageBuilderResult(snapshot3.data, ogcontext),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  );
                 } else {
                   return Container();
                 }
@@ -504,7 +546,9 @@ class RouteProfile {
             final imageState =
                 Provider.of<ValueNotifier<String>>(ogcontext, listen: false);
             imageState.value = defaultImage;
-            return imageBuilderResult(imageState);
+            return Container(
+              child: imageBuilderResult(imageState, ogcontext),
+            );
           }
         } else {
           return Container();
@@ -526,9 +570,11 @@ class RouteProfile {
                   snapshot.connectionState == ConnectionState.waiting) {
                 return Text("");
               } else {
-                nameEditor.text = snapshot.data;
+                Map<int, String> map = snapshot.data;
+                nameEditor.text = "${map[1]} ${map[2]}";
+                name = "${map[1]} ${map[2]}";
                 return Text(
-                  snapshot.data,
+                  name,
                   style: nameStyle,
                 );
               }
@@ -565,8 +611,6 @@ class RouteProfile {
       ),
     );
   }
-
- 
 
   double widthCalculator(String string) {
     if (string.length > 5) {

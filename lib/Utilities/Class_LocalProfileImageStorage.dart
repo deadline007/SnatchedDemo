@@ -19,8 +19,7 @@ class ClassLocalProfileImageStorage {
     await file.writeAsBytes(imageData, mode: FileMode.writeOnly).then(
           (value) => print("Image Stored"),
         );
-    return;
-  }
+      }
 
   Future<bool> get imageStatus async {
     final File file = await localFile;
