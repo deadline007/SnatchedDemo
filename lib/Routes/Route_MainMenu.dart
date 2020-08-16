@@ -6,19 +6,23 @@ import 'package:snatched/Routes/Route_BottomBar.dart';
 import 'package:snatched/Routes/Route_OrderMenu.dart';
 import 'package:snatched/Routes/Route_Profile.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
+import 'package:snatched/Utilities/Class_FireStoreImageRetrieve.dart';
 import 'package:snatched/Utilities/Class_LocalProfileImageStorage.dart';
 import 'package:snatched/Utilities/Raw_ColorForTop.dart';
 
 class RouteMainMenu extends StatelessWidget {
-
-  
   Future<String> imagePathRetrieve() async {
     if (await ClassLocalProfileImageStorage().imageStatus) {
       File file = await ClassLocalProfileImageStorage().localFile;
       return file.path;
-    } else {
-      return ClassAssetHolder.defUser;
+    } else if (await ClassFireStoreImageRetrieve().imageStatus()) {
+      File file = await ClassLocalProfileImageStorage()
+          .storeImage(await ClassFireStoreImageRetrieve().getImage());
+      print(await file.length());
+      return file.path;
     }
+
+    return ClassAssetHolder.defUser;
   }
 
   @override

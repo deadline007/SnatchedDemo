@@ -38,11 +38,18 @@ class RouteSplash extends StatelessWidget {
         body: Container(
           decoration: new BoxDecoration(color: Colors.white),
           child: new Center(
-            child: Image.asset(
-              ClassAssetHolder.logo,
-              height: 300,
-            ), //<- place where the image appears
-          ),
+              child: Container(
+            width: ClassScreenConf.hArea,
+            height: ClassScreenConf.vArea,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              fit: BoxFit.fill,
+              image: AssetImage(
+                ClassAssetHolder.frontlogo,
+              ),
+            )),
+          ) //<- place where the image appears
+              ),
         ),
       ),
     );

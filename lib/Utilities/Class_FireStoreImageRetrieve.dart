@@ -12,15 +12,21 @@ class ClassFireStoreImageRetrieve {
   }
 
   Future<Uint8List> getImage() async {
-    StorageReference storageReference= await _getRef();
-    Uint8List imageData=await storageReference.getData(5000000);
+    StorageReference storageReference = await _getRef();
+    Uint8List imageData = await storageReference.getData(5000000);
     return imageData;
   }
 
-  Future<bool> imageStatus() async{
-    bool state=true;
-    StorageReference storageReference=await _getRef();
-    await storageReference.getDownloadURL().catchError(()=> state=false);
+  Future<bool> imageStatus() async {
+    bool state = true;
+    try {
+      StorageReference storageReference = await _getRef();
+      await storageReference
+          .getDownloadURL()
+          .catchError((error) => state = false);
+    } on Exception {
+      state = false;
+    }
     return state;
   }
 }

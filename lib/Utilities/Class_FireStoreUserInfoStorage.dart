@@ -53,13 +53,50 @@ class ClassFireStoreUserInfoStorage {
     await userData.document(uid).setData({
       "First Name": firstName,
       "Last Name": lastName,
-    });
+    }, merge: true);
   }
-  
-  static Future storeAddress(Map<int,String> map) async {
+
+  static Future storeAddress1(String address) async {
     Map<CollectionReference, String> map = await getDetails;
     final userData = map.keys.first;
     final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Address 1": address,
+        }),
+        merge: true);
   }
 
+  static Future storeAddress2(String address) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Address 2": address,
+        }),
+        merge: true);
+  }
+
+  static Future storeAddress3(String address) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Address 3": address,
+        }),
+        merge: true);
+  }
+
+  static Future storePhone(int phone) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Phone": phone,
+        }),
+        merge: true);
+  }
 }

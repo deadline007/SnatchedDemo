@@ -210,7 +210,7 @@ class RouteProfile {
         Provider.of<ValueNotifier<String>>(context, listen: false);
     imageState.value = imageFile.path;
     print("New Image Set !");
-    
+
     return imageState;
   }
 
@@ -308,6 +308,22 @@ class RouteProfile {
                       await ClassFireStoreUserInfoStorage.storeName(
                           nameEditor.text);
                     }
+                    if (phoneEditor.text != phone) {
+                      await ClassFireStoreUserInfoStorage.storePhone(
+                          int.parse(phoneEditor.text));
+                    }
+                    if (address1Editor.text != address1) {
+                      await ClassFireStoreUserInfoStorage.storeAddress1(
+                          address1Editor.text);
+                    }
+                    if (address2Editor.text != address1) {
+                      await ClassFireStoreUserInfoStorage.storeAddress2(
+                          address2Editor.text);
+                    }
+                    if (address3Editor.text != address1) {
+                      await ClassFireStoreUserInfoStorage.storeAddress3(
+                          address3Editor.text);
+                    }
                     currentState.value = editState.NONE;
                   },
                   child: Icon(
@@ -347,7 +363,7 @@ class RouteProfile {
               if (value.value == profileAddressState.DEFAULT) {
                 return addressBuilder();
               } else {
-                return addressBuilder();
+                return addressEditorBuilder();
               }
             }),
             onTap: () {
@@ -360,21 +376,40 @@ class RouteProfile {
         ),
         Positioned(
           top: heightMin * 77,
-          child: GestureDetector(
-            child: Consumer<ValueNotifier<profilePhoneState>>(
-                builder: (__, value, _) {
-              if (value.value == profilePhoneState.DEFAULT) {
-                return phoneBuilder();
-              } else {
-                return phoneBuilder();
-              }
-            }),
-            onTap: () {
-              final provider = Provider.of<ValueNotifier<profilePhoneState>>(
-                  context,
-                  listen: false);
-              provider.value = profilePhoneState.EDITING;
-            },
+          child: Container(
+            width: widthMax,
+            height: heightMin * 12,
+            child: Padding(
+              padding: subElementPadding,
+              child: Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Phone", style: subElementStyle),
+                  ),
+                  Positioned(
+                    top: heightMin * 5,
+                    child: GestureDetector(
+                      child: Consumer<ValueNotifier<profilePhoneState>>(
+                          builder: (__, value, _) {
+                        if (value.value == profilePhoneState.DEFAULT) {
+                          return phoneBuilder();
+                        } else {
+                          return phoneEditorBuilder();
+                        }
+                      }),
+                      onTap: () {
+                        final provider =
+                            Provider.of<ValueNotifier<profilePhoneState>>(
+                                context,
+                                listen: false);
+                        provider.value = profilePhoneState.EDITING;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
@@ -429,7 +464,25 @@ class RouteProfile {
         ),
         Positioned(
           top: heightMin * 77,
-          child: phoneBuilder(),
+          child: Container(
+            width: widthMax,
+            height: heightMin * 12,
+            child: Padding(
+              padding: subElementPadding,
+              child: Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Phone", style: subElementStyle),
+                  ),
+                  Positioned(
+                    top: heightMin * 5,
+                    child: phoneBuilder(),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -612,6 +665,27 @@ class RouteProfile {
     );
   }
 
+  Widget phoneEditorBuilder() {
+    double width = widthCalculator(phoneEditor.text);
+    return Container(
+      child: StatefulBuilder(builder: (context, StateSetter statesetter) {
+        return AnimatedContainer(
+          duration: Duration(milliseconds: 10),
+          width: width,
+          child: TextField(
+            controller: phoneEditor,
+            onChanged: (string) {
+              width = widthCalculator(string);
+              statesetter(() {});
+            },
+            style: userDataStyle,
+            maxLines: 1,
+          ),
+        );
+      }),
+    );
+  }
+
   double widthCalculator(String string) {
     if (string.length > 5) {
       double width;
@@ -628,39 +702,22 @@ class RouteProfile {
     }
   }
 
-  Container phoneBuilder() {
-    return Container(
-      width: widthMax,
-      height: heightMin * 12,
-      child: Padding(
-        padding: subElementPadding,
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text("Phone", style: subElementStyle),
-            ),
-            Positioned(
-              top: heightMin * 5,
-              child: FutureBuilder(
-                future: ClassFireStoreUserinfoRetrieve().retrievePhone(),
-                builder: (_, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.none ||
-                      snapshot.connectionState == ConnectionState.waiting) {
-                    return Text("");
-                  } else {
-                    phoneEditor.text = snapshot.data;
-                    return Text(
-                      snapshot.data,
-                      style: userDataStyle,
-                    );
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget phoneBuilder() {
+    return FutureBuilder(
+      future: ClassFireStoreUserinfoRetrieve().retrievePhone(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.none ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return Text("");
+        } else {
+          phoneEditor.text = snapshot.data;
+          phone = snapshot.data;
+          return Text(
+            "+91 ${snapshot.data}",
+            style: userDataStyle,
+          );
+        }
+      },
     );
   }
 
@@ -692,12 +749,101 @@ class RouteProfile {
                     address1Editor.text = map[1];
                     address2Editor.text = map[2];
                     address3Editor.text = map[3];
+                    address1 = map[1];
+                    address2 = map[2];
+                    address3 = map[3];
                     return Text(
                       "${map[1]}\n${map[2]}\n${map[3]}\n",
                       style: userDataStyle,
                     );
                   }
                 },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget addressEditorBuilder() {
+    double widthAddress1 = widthCalculator(address1Editor.text);
+    double widthAddress2 = widthCalculator(address2Editor.text);
+    double widthAddress3 = widthCalculator(address3Editor.text);
+    return Container(
+      width: widthMax,
+      height: heightMin * 18,
+      child: Padding(
+        padding: subElementPadding,
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Address",
+                style: subElementStyle,
+              ),
+            ),
+            Positioned(
+              top: heightMin * 5,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    child: StatefulBuilder(
+                        builder: (context, StateSetter statesetter) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 10),
+                        width: widthAddress1,
+                        child: TextField(
+                          controller: address1Editor,
+                          onChanged: (string) {
+                            widthAddress1 = widthCalculator(string);
+                            statesetter(() {});
+                          },
+                          style: userDataStyle,
+                          maxLines: 1,
+                        ),
+                      );
+                    }),
+                  ),
+                  Container(
+                    child: StatefulBuilder(
+                        builder: (context, StateSetter statesetter) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 10),
+                        width: widthAddress2,
+                        child: TextField(
+                          controller: address2Editor,
+                          onChanged: (string) {
+                            widthAddress2 = widthCalculator(string);
+                            statesetter(() {});
+                          },
+                          style: userDataStyle,
+                          maxLines: 1,
+                        ),
+                      );
+                    }),
+                  ),
+                  Container(
+                    child: StatefulBuilder(
+                        builder: (context, StateSetter statesetter) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 10),
+                        width: widthAddress3,
+                        child: TextField(
+                          controller: address3Editor,
+                          onChanged: (string) {
+                            widthAddress3 = widthCalculator(string);
+                            statesetter(() {});
+                          },
+                          style: userDataStyle,
+                          maxLines: 1,
+                        ),
+                      );
+                    }),
+                  ),
+                ],
               ),
             ),
           ],

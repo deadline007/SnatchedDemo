@@ -14,12 +14,13 @@ class ClassLocalProfileImageStorage {
     return file;
   }
 
-  Future<void> storeImage(Uint8List imageData) async {
+  Future<File> storeImage(Uint8List imageData) async {
     final File file = await localFile;
     await file.writeAsBytes(imageData, mode: FileMode.writeOnly).then(
           (value) => print("Image Stored"),
         );
-      }
+    return file;
+  }
 
   Future<bool> get imageStatus async {
     final File file = await localFile;
