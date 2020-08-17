@@ -5,7 +5,7 @@ import 'package:snatched/Routes/Route_Splash.dart';
 import 'package:snatched/Routes/Route_AuthSignIn.dart';
 import 'package:snatched/Routes/Route_AuthSignUp.dart';
 import 'package:snatched/Routes/Route_AppInfo.dart';
-import 'package:snatched/Routes/Route_Menu.dart';
+import 'package:snatched/Routes/Route_MainMenu.dart';
 
 void main() {
   runApp(
@@ -22,8 +22,8 @@ class Main extends StatelessWidget {
         '/': (context) => RouteSplash(),
         '/authSignIn': (context) => RouteAuthSignIn(),
         '/appInfo': (context) => RouteAppInfo(),
-        '/menu': (context) => RouteMenu(),
-        '/authSignUp' :(context) => RouteAuthSignUp(),
+        '/menu': (context) => RouteMainMenu(),
+        '/authSignUp': (context) => RouteAuthSignUp(),
       },
     );
   }

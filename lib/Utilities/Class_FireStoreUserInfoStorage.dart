@@ -15,17 +15,88 @@ class ClassFireStoreUserInfoStorage {
     @required this.email,
   });
 
-  Future storeIntoFireStore() async {
+  static Future<Map<CollectionReference, String>> get getDetails async {
     final userData = Firestore.instance.collection('userData');
+    final uid = await ClassFirebaseAuth.getCurrentUser();
+    Map<CollectionReference, String> map = {userData: uid};
+    return map;
+  }
+
+  Future storeIntoFireStore() async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
     print("Storing into firebase...");
-    await userData.document(this.email).setData({
-      "First Name ": this.firstName,
-      "Last Name ": this.lastName,
-      "Address 1 ": this.address1,
-      "Address 2 ": this.address2,
-      "Address 3 ": this.address3,
-      "Phone ": this.phone,
-      "UID": await ClassFirebaseAuth.getCurrentUser(),
+    await userData.document(uid).setData({
+      "First Name": this.firstName,
+      "Last Name": this.lastName,
+      "Address 1": this.address1,
+      "Address 2": this.address2,
+      "Address 3": this.address3,
+      "Phone": this.phone,
+      "email": this.email,
+      "UID": uid,
     });
+  }
+
+  static Future storeName(String name) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    List<String> nameSplit = name.split(" ");
+    String firstName = nameSplit[0];
+    String lastName = "";
+    if (nameSplit.length > 1) {
+      lastName = nameSplit[1];
+    }
+    print("Storing name");
+    await userData.document(uid).setData({
+      "First Name": firstName,
+      "Last Name": lastName,
+    }, merge: true);
+  }
+
+  static Future storeAddress1(String address) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Address 1": address,
+        }),
+        merge: true);
+  }
+
+  static Future storeAddress2(String address) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Address 2": address,
+        }),
+        merge: true);
+  }
+
+  static Future storeAddress3(String address) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Address 3": address,
+        }),
+        merge: true);
+  }
+
+  static Future storePhone(int phone) async {
+    Map<CollectionReference, String> map = await getDetails;
+    final userData = map.keys.first;
+    final uid = map.values.first;
+    await userData.document(uid).setData(
+        ({
+          "Phone": phone,
+        }),
+        merge: true);
   }
 }
