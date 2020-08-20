@@ -8,6 +8,7 @@ import 'package:snatched/Routes/Route_Profile.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_FireStoreImageRetrieve.dart';
 import 'package:snatched/Utilities/Class_LocalProfileImageStorage.dart';
+import 'package:snatched/Utilities/Class_FireStoreVendorDataRetrieve.dart';
 import 'package:snatched/Utilities/Raw_ColorForTop.dart';
 
 class RouteMainMenu extends StatelessWidget {
@@ -44,7 +45,9 @@ class RouteMainMenu extends StatelessWidget {
           switch (value.value) {
             case currentPage.MENU:
               print("Opening OrderMenu");
+              ClassFireStoreVendorDataRetrieve().vendorData();
               return RouteOrderMenu().buildOrderMenu(context);
+
               break;
             /* 
             case currentPage.ORDERS:
