@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:snatched/Routes/Route_BottomBar.dart';
 import 'package:snatched/Routes/Route_OrderMenu.dart';
 import 'package:snatched/Routes/Route_Profile.dart';
+import 'package:snatched/Routes/Route_OrderHistory.dart';
 import 'package:snatched/Utilities/Class_AssetHolder.dart';
 import 'package:snatched/Utilities/Class_FireStoreImageRetrieve.dart';
 import 'package:snatched/Utilities/Class_LocalProfileImageStorage.dart';
-import 'package:snatched/Utilities/Class_FireStoreVendorDataRetrieve.dart';
 import 'package:snatched/Utilities/Raw_ColorForTop.dart';
 
 class RouteMainMenu extends StatelessWidget {
@@ -45,14 +45,15 @@ class RouteMainMenu extends StatelessWidget {
           switch (value.value) {
             case currentPage.MENU:
               print("Opening OrderMenu");
-              ClassFireStoreVendorDataRetrieve().vendorData();
-              return RouteOrderMenu().buildOrderMenu(context);
+
+              return RouteOrderMenu();
 
               break;
-            /* 
+
             case currentPage.ORDERS:
+              return RouteOrderHistory();
               break;
-              */
+
             case currentPage.PROFILE:
               print("Opening profile");
               return FutureBuilder(
@@ -79,7 +80,7 @@ class RouteMainMenu extends StatelessWidget {
               break;
             default:
               print("default ! Opening OrderMenu");
-              return RouteOrderMenu().buildOrderMenu(context);
+              return RouteOrderMenu();
               break;
           }
         },

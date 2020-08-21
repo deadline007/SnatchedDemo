@@ -4,6 +4,14 @@ class ClassVendorData {
   final location;
   final int phone;
   final String vid;
+  final double stars;
+  final String type;
   ClassVendorData(
-      {this.location, this.name, this.onlineStatus, this.phone, this.vid});
+      {this.location,
+      this.type,
+      this.name,
+      this.onlineStatus,
+      this.phone,
+      this.vid,
+      this.stars});
 }
