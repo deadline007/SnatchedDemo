@@ -231,6 +231,10 @@ class RouteAuthSignIn extends StatelessWidget {
                             ),
                             Container(
                               child: TextField(
+                                onSubmitted: (value) {
+                                  resetDisplay(context);
+                                  submit(context);
+                                },
                                 controller: _password,
                                 obscureText: true,
                                 cursorColor: colorDef,

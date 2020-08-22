@@ -24,7 +24,100 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
 
   final Color colorDef = ClassAssetHolder.mainColor;
   List<ClassVendorData> vendorDataList = List();
-  GlobalKey<AnimatedListState> listKey;
+  GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+
+  List<Material> adBanner = [
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 10,
+          width: ClassScreenConf.blockH * 50,
+          color: Colors.blue[300],
+        ),
+      ),
+    ),
+    Material(
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 5,
+          width: ClassScreenConf.blockH * 30,
+          color: Colors.amber[300],
+        ),
+      ),
+    ),
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 5,
+          width: ClassScreenConf.blockH * 30,
+          color: Colors.cyan[50],
+        ),
+      ),
+    ),
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 10,
+          width: ClassScreenConf.blockH * 50,
+          color: Colors.green[200],
+        ),
+      ),
+    ),
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 5,
+          width: ClassScreenConf.blockH * 30,
+          color: Colors.amber[500],
+        ),
+      ),
+    ),
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 5,
+          width: ClassScreenConf.blockH * 30,
+          color: Colors.blue[600],
+        ),
+      ),
+    ),
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        splashColor: Colors.blue,
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 5,
+          width: ClassScreenConf.blockH * 30,
+          color: Colors.red[100],
+        ),
+      ),
+    ),
+    Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          height: ClassScreenConf.blockV * 10,
+          width: ClassScreenConf.blockH * 50,
+          color: Colors.red[600],
+        ),
+      ),
+    ),
+  ];
+
+  final TextEditingController searchBar = TextEditingController();
 
   Future<void> vendorDataInit() async {
     vendorDataList = await ClassFireStoreVendorDataRetrieve().vendorData();
@@ -33,7 +126,9 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
 
   void initListener() async {
     Future.delayed(Duration(seconds: 10), () {
-      ClassFireStoreVendorDataRetrieve().vendorStream.listen((event) {
+      ClassFireStoreVendorDataRetrieve()
+          .vendorStream
+          .listen((QuerySnapshot event) {
         final List<ClassVendorData> newList =
             event.documents.map((DocumentSnapshot doc) {
           return ClassVendorData(
@@ -47,18 +142,22 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
           );
         }).toList();
         newList.forEach((element) {
-          if (!vendorDataList.contains(element)) {
-            if (element.onlineStatus) {
-              vendorListInsert(element: element, listKey: listKey);
-            }
+          print("New Vendor List captured");
+          int index =
+              vendorDataList.indexWhere((vendor) => element.vid == vendor.vid);
+          if (index != -1) {
+            if (!element.onlineStatus)
+              vendorListPop(vid: element.vid, index: index);
           } else {
-            if (!element.onlineStatus) {
-              vendorListPop(vid: element.vid, listKey: listKey);
-            }
+            if (element.onlineStatus) vendorListInsert(element: element);
           }
         });
       });
     });
+  }
+
+  void searchButtonPressed(String value) {
+    searchBar.text = "";
   }
 
   @override
@@ -75,15 +174,60 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
               child: Container(
                 width: widthMax,
                 height: heightMin * 8,
-                color: Colors.white,
                 child: Center(
                   child: Container(
                     width: widthMax - (widthMin * 10),
                     height: heightMin * 5,
+                    color: Colors.white,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Card(
+                        shadowColor: Colors.white,
+                        color: Colors.transparent,
                         elevation: 8,
+                        child: Container(
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: widthMin * 2,
+                                top: -heightMin * 1.4,
+                                child: Container(
+                                  width: widthMax - (widthMin * 10),
+                                  child: TextField(
+                                    controller: searchBar,
+                                    cursorColor: colorDef,
+                                    cursorWidth: widthMin * 0.5,
+                                    onSubmitted: searchButtonPressed,
+                                    style: TextStyle(
+                                      fontSize: heightMin * 3,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: -heightMin * 1.2,
+                                child: ClipOval(
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      child: IconButton(
+                                        onPressed: () =>
+                                            searchButtonPressed(searchBar.text),
+                                        icon: Icon(
+                                          Icons.search,
+                                          color: colorDef,
+                                          size: heightMin * 4,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -91,7 +235,18 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
               ),
             ),
             Positioned(
-              top: heightMin * 20,
+              top: heightMin * 16,
+              child: Container(
+                width: widthMax,
+                height: heightMin * 14,
+                child: ListView(
+                  children: adBanner,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+            ),
+            Positioned(
+              top: heightMin * 30,
               child: Container(
                 height: heightMax,
                 width: widthMax,
@@ -137,7 +292,7 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
 
   Card buildCardElement(ClassVendorData vendorElement) {
     return Card(
-      elevation: 0,
+      elevation: 2,
       child: Container(
         width: widthMax,
         height: heightMin * 10,
@@ -208,23 +363,25 @@ class _RouteOrderMenuState extends State<RouteOrderMenu> {
     );
   }
 
-  void vendorListPop({String vid, GlobalKey<AnimatedListState> listKey}) {
-    int indexOfVid = vendorDataList.indexWhere((element) => element.vid == vid);
-    ClassVendorData removedItem = vendorDataList.removeAt(indexOfVid);
-    listKey.currentState.removeItem(
-      indexOfVid,
-      (context, animation) => buildCardElement(
-        removedItem,
-      ),
-    );
+  void vendorListPop({String vid, int index}) {
+    ClassVendorData removedItem = vendorDataList.removeAt(index);
+    print("Popping");
+    if (listKey.currentState != null) {
+      listKey.currentState.removeItem(
+        index,
+        (context, animation) => buildCardElement(
+          removedItem,
+        ),
+      );
+    }
   }
 
-  void vendorListInsert(
-      {ClassVendorData element, GlobalKey<AnimatedListState> listKey}) {
-    print(vendorDataList.length);
+  void vendorListInsert({ClassVendorData element}) {
     vendorDataList.insert(vendorDataList.length, element);
-    print(listKey.currentState.toString());
-    listKey.currentState.insertItem(vendorDataList.length - 1);
-    print(vendorDataList.length);
+    if (listKey.currentState != null) {
+      print("Inserting");
+      listKey.currentState.insertItem(vendorDataList.length - 1);
+      print(vendorDataList.length);
+    }
   }
 }

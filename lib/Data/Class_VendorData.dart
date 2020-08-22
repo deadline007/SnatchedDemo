@@ -6,6 +6,9 @@ class ClassVendorData {
   final String vid;
   final double stars;
   final String type;
+  String vendorBannerPath;
+  String vendorProfileImage;
+
   ClassVendorData(
       {this.location,
       this.type,
