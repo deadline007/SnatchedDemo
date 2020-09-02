@@ -9,12 +9,15 @@ class ClassVendorData {
   String vendorBannerPath;
   String vendorProfileImage;
 
-  ClassVendorData(
-      {this.location,
-      this.type,
-      this.name,
-      this.onlineStatus,
-      this.phone,
-      this.vid,
-      this.stars});
+  ClassVendorData({
+    this.location,
+    this.type,
+    this.name,
+    this.onlineStatus,
+    this.phone,
+    this.vid,
+    this.stars,
+    this.vendorBannerPath,
+    this.vendorProfileImage,
+  });
 }

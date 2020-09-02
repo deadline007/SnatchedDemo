@@ -12,7 +12,7 @@ class ClassFireStoreVendorDataRetrieve {
     List<ClassVendorData> listOfVendorData = List();
 
     listOfDocs.forEach(
-      (element) {
+      (element) async {
         if (filter) {
           if (element["OnlineStatus"]) {
             listOfVendorData.add(addData(element));
