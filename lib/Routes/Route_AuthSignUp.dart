@@ -341,18 +341,18 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             top: heightMin * 5,
             child: Row(
               children: <Widget>[
-                Container(
-                  child: Material(
-                    child: InkWell(
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+//                Container(
+//                  child: Material(
+//                    child: InkWell(
+//                      child: IconButton(
+//                        icon: Icon(Icons.arrow_back_ios),
+//                        onPressed: () {
+//                          Navigator.pop(context);
+//                        },
+//                      ),
+//                    ),
+//                  ),
+//                ),
                 Container(
                   height: heightMin * 10,
                   width: widthMax - 100,
@@ -370,7 +370,7 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
               width: widthMax,
               child: Center(
                 child: Text(
-                  "Register",
+                  "Sign Up",
                   style: TextStyle(
                     fontFamily: fontDef,
                     fontSize: widthMin * 10,
