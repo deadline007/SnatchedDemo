@@ -33,7 +33,7 @@ class _RouteAppInfoState extends State<RouteAppInfo> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     mySLides = getSlides();
     controller = new PageController();
@@ -114,7 +114,7 @@ class _RouteAppInfoState extends State<RouteAppInfo> {
           ),
         ):InkWell(
         onTap: _SignIn,
-//          child: new Icon(Icons.navigate_next),
+
 
         child: Container(
            height: 60,
@@ -223,8 +223,8 @@ List<SliderModel> getSlides(){
   sliderModel = new SliderModel();
 
   //3
-  sliderModel.setDesc("Food delivery or pickup from local restaurants, Explore restaurants that deliver near you.");
-  sliderModel.setTitle("Deliver........");
+  sliderModel.setDesc("Food pickup from local restaurants, Explore restaurants that deliver near you.");
+  sliderModel.setTitle("Pickup........");
   sliderModel.setImageAssetPath("assets/images/foodie_image2.png");
   slides.add(sliderModel);
 
