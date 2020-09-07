@@ -43,9 +43,9 @@ class RouteSplash extends StatelessWidget {
             height: ClassScreenConf.vArea,
             decoration: BoxDecoration(
                 image: DecorationImage(
-              fit: BoxFit.fill,
+//              fit: BoxFit.fill,
               image: AssetImage(
-                ClassAssetHolder.frontlogo,
+                ClassAssetHolder.Icon,
               ),
             )),
           ) //<- place where the image appears

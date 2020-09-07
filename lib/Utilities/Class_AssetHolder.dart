@@ -11,6 +11,7 @@ class ClassAssetHolder {
   static final String intro2 = 'assets/images/foodie_image2.png';
   static final String intro3 = 'assets/images/foodie_image3.png';
   static final String defUser = 'assets/images/defUser.png';
+  static final String Icon = 'assets/images/appIconDef.png';
   static final String proximaLight = 'ProximaLight';
   static Color mainColor = Color(0xFFFE0265);
   static final IconData rightIcon = CustomIcons.right;
