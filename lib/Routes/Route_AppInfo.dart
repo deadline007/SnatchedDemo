@@ -225,7 +225,7 @@ List<SliderModel> getSlides(){
   //3
   sliderModel.setDesc("Food pickup from local restaurants, Explore restaurants that deliver near you.");
   sliderModel.setTitle("Pickup........");
-  sliderModel.setImageAssetPath("assets/images/foodie_image2.png");
+  sliderModel.setImageAssetPath("assets/images/appIconDef.png");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();

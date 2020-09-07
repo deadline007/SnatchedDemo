@@ -42,6 +42,7 @@ flutter:
     - assets/images/foodie_image3.png
     - assets/images/defUser.png
     - assets/images/front_logo.png
+    - assets/images/appIconDef.png
 
   fonts:
     - family: ProximaLight
