@@ -24,9 +24,15 @@ class RouteSplash extends StatelessWidget {
       Duration(seconds: 3),
       () async {
         if (!await ClassSharedPref().getState()) {
-          Navigator.pushNamedAndRemoveUntil(
+          /* Navigator.pushNamedAndRemoveUntil(
             context,
             '/appInfo',
+            (_) => false,
+          );
+        } */
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/authSignIn',
             (_) => false,
           );
         }

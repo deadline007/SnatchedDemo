@@ -348,10 +348,10 @@ class TotalCalculationWidget extends StatelessWidget {
 //}
 
 class CartItem extends StatelessWidget {
-  String productName;
-  String productPrice;
-  String productImage;
-  String productCartQuantity;
+  final String productName;
+  final String productPrice;
+  final String productImage;
+  final String productCartQuantity;
 
   CartItem({
     Key key,
@@ -465,7 +465,7 @@ class CartItem extends StatelessWidget {
 }
 
 class AddToCartMenu extends StatelessWidget {
-  int productCounter;
+  final int productCounter;
 
   AddToCartMenu(this.productCounter);
 

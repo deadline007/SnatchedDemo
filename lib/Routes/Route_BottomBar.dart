@@ -23,15 +23,15 @@ class RouteBottomBar {
   final List<BottomNavigationBarItem> bottomNavItems = [
     BottomNavigationBarItem(
       icon: Icon(Icons.account_circle),
-      title: Text("Profile"),
+      label: "Profile",
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.restaurant_menu),
-      title: Text("Menu"),
+      label: "Menu",
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.restore),
-      title: Text("Orders"),
+      label: "Orders",
     ),
   ];
 
@@ -41,11 +41,9 @@ class RouteBottomBar {
         return BottomNavigationBar(
           items: bottomNavItems,
           elevation: 20,
-          
           backgroundColor: Colors.white,
           iconSize: widthMin * 8,
           unselectedItemColor: Colors.grey[800],
-          
           selectedItemColor: colorDef,
           showUnselectedLabels: false,
           showSelectedLabels: false,

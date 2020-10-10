@@ -32,15 +32,17 @@ class RouteAppInfo extends StatelessWidget {
     );
   }
 
+  void changeCounter(String option, BuildContext context) {
+    final counter = Provider.of<ValueNotifier<int>>(context, listen: false);
+    if (option == "add") {
+      counter.value += 1;
+    } else {
+      counter.value -= 1;
+    }
+  }
+
   Widget widgetData(BuildContext context) {
     final counter = Provider.of<ValueNotifier<int>>(context, listen: false);
-    void changeCounter(String option) {
-      if (option == "add") {
-        counter.value += 1;
-      } else {
-        counter.value -= 1;
-      }
-    }
 
     return Scaffold(
       body: Container(
@@ -52,9 +54,9 @@ class RouteAppInfo extends StatelessWidget {
               onPanUpdate: (details) {
                 if (details.delta.dx < -1.5 &&
                     counter.value < imageList.length - 1) {
-                  changeCounter("add");
+                  changeCounter("add", context);
                 } else if (details.delta.dx > 1.5 && counter.value > 0) {
-                  changeCounter("minus");
+                  changeCounter("minus", context);
                 }
               },
               child: Center(
@@ -84,7 +86,7 @@ class RouteAppInfo extends StatelessWidget {
                     ),
                     onPressed: () async {
                       if (counter.value < imageList.length - 1) {
-                        changeCounter("add");
+                        changeCounter("add", context);
                       } else {
                         await Future.value(
                                 ClassPermissionManager().askForPerms())

@@ -56,32 +56,19 @@ class RouteAuthSignUp extends StatefulWidget {
 
 class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
   final double widthMin = ClassScreenConf.blockH;
-
   final double widthMax = ClassScreenConf.hArea;
-
   final double heightMin = ClassScreenConf.blockV;
-
   final double heightMax = ClassScreenConf.vArea;
-
   final String fontDef = ClassAssetHolder.proximaLight;
-
   final Color colorDef = ClassAssetHolder.mainColor;
-
   final Color colorDef2 = Colors.grey[400];
-
   final TextEditingController _email = TextEditingController();
-
   final TextEditingController _password = TextEditingController();
-
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
-
   final TextEditingController _phone = TextEditingController();
-
   final TextEditingController _addressLine1 = TextEditingController();
-
   final TextEditingController _addressLine2 = TextEditingController();
-
   final TextEditingController _addressLine3 = TextEditingController();
   final StreamController<emailConfStatus> verificationStreamController =
       StreamController<emailConfStatus>();
@@ -250,8 +237,11 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
     errorPassword.value = password_error.NO_PASSWORD_GIVEN;
   }
 
-  TextField textFieldGen(TextEditingController clr, TextInputType tIn,
-      {bool hidden = false}) {
+  TextField textFieldGen(
+    TextEditingController clr,
+    TextInputType tIn, {
+    bool hidden = false,
+  }) {
     return TextField(
       controller: clr,
       obscureText: hidden,
@@ -321,11 +311,10 @@ class _RouteAuthSignUpState extends State<RouteAuthSignUp> {
             ),
           ),
         ],
-        child: Builder(
-          builder: (context) => buildContainer(
-            context,
-          ),
-        ),
+        child: Builder(builder: (context) {
+          ctxBackup = context;
+          return buildContainer(context);
+        }),
       ),
     );
   }
