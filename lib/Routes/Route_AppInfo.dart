@@ -14,12 +14,11 @@ class RouteAppInfo extends StatefulWidget {
 }
 
 class _RouteAppInfoState extends State<RouteAppInfo> {
-
   List<SliderModel> mySLides = new List<SliderModel>();
   int slideIndex = 0;
   PageController controller;
 
-  Widget _buildPageIndicator(bool isCurrentPage){
+  Widget _buildPageIndicator(bool isCurrentPage) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.0),
       height: isCurrentPage ? 10.0 : 6.0,
@@ -33,7 +32,6 @@ class _RouteAppInfoState extends State<RouteAppInfo> {
 
   @override
   void initState() {
-
     super.initState();
     mySLides = getSlides();
     controller = new PageController();
@@ -44,6 +42,7 @@ class _RouteAppInfoState extends State<RouteAppInfo> {
     void _SignIn() {
       Navigator.popAndPushNamed(context, "/authSignIn");
     }
+
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -78,58 +77,69 @@ class _RouteAppInfoState extends State<RouteAppInfo> {
             ],
           ),
         ),
-        bottomSheet: slideIndex != 2 ? Container(
-          margin: EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              FlatButton(
-                onPressed: (){
-                  controller.animateToPage(2, duration: Duration(milliseconds: 400), curve: Curves.linear);
-                },
-                splashColor: Colors.blue[50],
-                child: Text(
-                  "SKIP",
-                  style: TextStyle(color: Color(0xFF0074E4), fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
+        bottomSheet: slideIndex != 2
+            ? Container(
+                margin: EdgeInsets.symmetric(vertical: 16),
                 child: Row(
-                  children: [
-                    for (int i = 0; i < 3 ; i++) i == slideIndex ? _buildPageIndicator(true): _buildPageIndicator(false),
-                  ],),
-              ),
-              FlatButton(
-                onPressed: (){
-                  print("this is slideIndex: $slideIndex");
-                  controller.animateToPage(slideIndex + 1, duration: Duration(milliseconds: 500), curve: Curves.linear);
-                },
-                splashColor: Colors.blue[50],
-                child: Text(
-                  "NEXT",
-                  style: TextStyle(color: Color(0xFF0074E4), fontWeight: FontWeight.w600),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        controller.animateToPage(2,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.linear);
+                      },
+                      splashColor: Colors.blue[50],
+                      child: Text(
+                        "SKIP",
+                        style: TextStyle(
+                            color: Color(0xFF0074E4),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        children: [
+                          for (int i = 0; i < 3; i++)
+                            i == slideIndex
+                                ? _buildPageIndicator(true)
+                                : _buildPageIndicator(false),
+                        ],
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        print("this is slideIndex: $slideIndex");
+                        controller.animateToPage(slideIndex + 1,
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.linear);
+                      },
+                      splashColor: Colors.blue[50],
+                      child: Text(
+                        "NEXT",
+                        style: TextStyle(
+                            color: Color(0xFF0074E4),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : InkWell(
+                onTap: _SignIn,
+                child: Container(
+                  height: 60,
+                  color: Colors.blue,
+                  alignment: Alignment.center,
+                  child: Text(
+                    "GET STARTED NOW",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
-            ],
-          ),
-        ):InkWell(
-        onTap: _SignIn,
-
-
-        child: Container(
-           height: 60,
-            color: Colors.blue,
-            alignment: Alignment.center,
-            child: Text(
-              "GET STARTED NOW",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-            ),
-          ),
-
-        ),
       ),
-      );
-
+    );
   }
 }
 
@@ -150,64 +160,62 @@ class SlideTile extends StatelessWidget {
           SizedBox(
             height: 40,
           ),
-          Text(title, textAlign: TextAlign.center,style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20
-          ),),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+          ),
           SizedBox(
             height: 20,
           ),
-          Text(desc, textAlign: TextAlign.center,style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14))
+          Text(desc,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14))
         ],
       ),
     );
   }
 }
 
-class SliderModel{
-
+class SliderModel {
   String imageAssetPath;
   String title;
   String desc;
 
-  SliderModel({this.imageAssetPath,this.title,this.desc});
+  SliderModel({this.imageAssetPath, this.title, this.desc});
 
-  void setImageAssetPath(String getImageAssetPath){
+  void setImageAssetPath(String getImageAssetPath) {
     imageAssetPath = getImageAssetPath;
   }
 
-  void setTitle(String getTitle){
+  void setTitle(String getTitle) {
     title = getTitle;
   }
 
-  void setDesc(String getDesc){
+  void setDesc(String getDesc) {
     desc = getDesc;
   }
 
-  String getImageAssetPath(){
+  String getImageAssetPath() {
     return imageAssetPath;
   }
 
-  String getTitle(){
+  String getTitle() {
     return title;
   }
 
-  String getDesc(){
+  String getDesc() {
     return desc;
   }
-
 }
 
-
-List<SliderModel> getSlides(){
-
+List<SliderModel> getSlides() {
   List<SliderModel> slides = new List<SliderModel>();
   SliderModel sliderModel = new SliderModel();
 
   //1
-  sliderModel.setDesc("Discover a Food Courner offering the best fast food near you");
+  sliderModel
+      .setDesc("Discover a Food Courner offering the best fast food near you");
   sliderModel.setTitle("Search......");
   sliderModel.setImageAssetPath("assets/images/foodie_image1.png");
   slides.add(sliderModel);
@@ -215,7 +223,8 @@ List<SliderModel> getSlides(){
   sliderModel = new SliderModel();
 
   //2
-  sliderModel.setDesc("Our food plan is filled with delicious seasonal vegetables, whole grains, fast food , burgger , pizza etc.");
+  sliderModel.setDesc(
+      "Our food plan is filled with delicious seasonal vegetables, whole grains, fast food , burgger , pizza etc.");
   sliderModel.setTitle("Order..... ");
   sliderModel.setImageAssetPath("assets/images/foodie_image2.png");
   slides.add(sliderModel);
@@ -223,7 +232,8 @@ List<SliderModel> getSlides(){
   sliderModel = new SliderModel();
 
   //3
-  sliderModel.setDesc("Food pickup from local restaurants, Explore restaurants that deliver near you.");
+  sliderModel.setDesc(
+      "Food pickup from local restaurants, Explore restaurants that deliver near you.");
   sliderModel.setTitle("Pickup........");
   sliderModel.setImageAssetPath("assets/images/appIconDef.png");
   slides.add(sliderModel);
@@ -232,10 +242,6 @@ List<SliderModel> getSlides(){
 
   return slides;
 }
-
-
-
-
 
 //class RouteAppInfo extends StatelessWidget {
 //  final double widthMin = ClassScreenConf.blockH;
@@ -356,5 +362,3 @@ List<SliderModel> getSlides(){
                 ),
               ),
             ) */
-
-
